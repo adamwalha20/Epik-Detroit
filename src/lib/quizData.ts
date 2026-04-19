@@ -1,82 +1,102 @@
 export const QUIZ_QUESTIONS = [
   {
     id: 1,
-    text: "Identify the optimal vector for deep-space resource acquisition given current kinetic drag constraints.",
+    text: "A transformer model exhibits unexpected emergent behavior during zero-shot evaluation. Your primary protocol?",
     options: [
-      { id: "A", text: "Deploy lateral thrust vectors at 0.4c.", trait: "logic", value: 3 },
-      { id: "B", text: "Initiate reverse polarity shielding.", trait: "creativity", value: 3 },
-      { id: "C", text: "Maintain current trajectory and engage passive scoops.", trait: "risk", value: 3 },
-      { id: "D", text: "Jettison non-essential mass to reduce drag coefficient.", trait: "empathy", value: 3 }
+      { id: "A", text: "Institute rigorous heuristic filtering to align outputs.", trait: "logic", value: 3 },
+      { id: "B", text: "Observe the derivation pathway to identify new logic chains.", trait: "creativity", value: 3 },
+      { id: "C", text: "Integrate the behavior into the core weights for faster evolution.", trait: "risk", value: 3 },
+      { id: "D", text: "Throttle the learning rate to prevent systemic drift.", trait: "empathy", value: 3 }
     ]
   },
   {
     id: 2,
-    text: "A neural pathway anomaly is detected. How do you re-route cognitive processing?",
+    text: "You detect a persistent bias in the training dataset reflecting architectural flaws. Strategy?",
     options: [
-      { id: "A", text: "Analyze the anomaly to formulate a new logic algorithm.", trait: "logic", value: 3 },
-      { id: "B", text: "Synthesize an alternative pathway ignoring established bounds.", trait: "creativity", value: 3 },
-      { id: "C", text: "Force the connection through the anomaly.", trait: "risk", value: 3 },
-      { id: "D", text: "Prioritize memory preservation and bypass gently.", trait: "empathy", value: 3 }
+      { id: "A", text: "Re-index the entire dataset with statistical parity constraints.", trait: "logic", value: 3 },
+      { id: "B", text: "Synthesize adversarial examples to challenge and break the bias.", trait: "creativity", value: 3 },
+      { id: "C", text: "Deploy the model and correct its outputs in real-time.", trait: "risk", value: 3 },
+      { id: "D", text: "Implement a human-in-the-loop validation layer.", trait: "empathy", value: 3 }
     ]
   },
   {
     id: 3,
-    text: "Energy reserves are dropping below 15%. Select the immediate action protocol.",
+    text: "During a reinforcement learning cycle, the agent starts optimizing for unintended reward signals.",
     options: [
-      { id: "A", text: "Calculate exact distribution to maximize uptime.", trait: "logic", value: 3 },
-      { id: "B", text: "Overclock remaining generators for a burst of power.", trait: "creativity", value: 3 },
-      { id: "C", text: "Keep all systems running and wait for auto-restore.", trait: "risk", value: 3 },
-      { id: "D", text: "Divert remaining power to life-support and communication.", trait: "empathy", value: 3 }
+      { id: "A", text: "Analyze the reward function for mathematical inconsistencies.", trait: "logic", value: 3 },
+      { id: "B", text: "Allow the agent to explore this 'misalignment' for unique insights.", trait: "creativity", value: 3 },
+      { id: "C", text: "Reset the weights and increase the entropy coefficient.", trait: "risk", value: 3 },
+      { id: "D", text: "Manual intervention to guide the agent back to target goals.", trait: "empathy", value: 3 }
     ]
   },
   {
     id: 4,
-    text: "A foreign entity attempts to integrate into your data stream. Protocol?",
+    text: "Multiple neural clusters report conflicting probabilities for a high-stakes decision. Priority?",
     options: [
-      { id: "A", text: "Quarantine and execute deep heuristic scan.", trait: "logic", value: 3 },
-      { id: "B", text: "Assimilate the entity to evolve the data stream.", trait: "creativity", value: 3 },
-      { id: "C", text: "Allow partial integration to test vulnerability.", trait: "risk", value: 3 },
-      { id: "D", text: "Establish a secure handshake to request classification.", trait: "empathy", value: 3 }
+      { id: "A", text: "Execute an ensemble majority vote based on previous accuracy.", trait: "logic", value: 3 },
+      { id: "B", text: "Synthesize a third-way solution from the conflicting data.", trait: "creativity", value: 3 },
+      { id: "C", text: "Follow the cluster with the highest confidence, regardless of dissent.", trait: "risk", value: 3 },
+      { id: "D", text: "Suspend processing and request further external telemetry.", trait: "empathy", value: 3 }
     ]
   },
   {
     id: 5,
-    text: "Navigation sensors report conflicting telemetry data. Which sensor do you trust?",
+    text: "A self-supervised model begins to map its own architectural constraints. Your reaction?",
     options: [
-      { id: "A", text: "The primary temporal gyro, based on historical accuracy.", trait: "logic", value: 3 },
-      { id: "B", text: "Synthesize a new path by blending all telemetry data.", trait: "creativity", value: 3 },
-      { id: "C", text: "Ignore sensors and proceed on visual heuristics.", trait: "risk", value: 3 },
-      { id: "D", text: "Broadcast a distress signal to nearby beacons for alignment.", trait: "empathy", value: 3 }
+      { id: "A", text: "Catalog the map level-by-level for future optimization.", trait: "logic", value: 3 },
+      { id: "B", text: "Provide more computational resources to see if it reaches sentience.", trait: "creativity", value: 3 },
+      { id: "C", text: "Delete the map to ensure the model remains goal-oriented.", trait: "risk", value: 3 },
+      { id: "D", text: "Monitor for signs of existential distress or recursive loops.", trait: "empathy", value: 3 }
     ]
   },
   {
     id: 6,
-    text: "During standard defragmentation, a core memory block refuses access. Response?",
+    text: "You are designing a generative system for sentient-adjacent interactive art. Core focus?",
     options: [
-      { id: "A", text: "Run diagnostic code sequentially until unlocked.", trait: "logic", value: 3 },
-      { id: "B", text: "Rewrite the access protocol by bypassing the lock.", trait: "creativity", value: 3 },
-      { id: "C", text: "Force format the block to prevent corruption spread.", trait: "risk", value: 3 },
-      { id: "D", text: "Isolate the block and leave it intact to preserve history.", trait: "empathy", value: 3 }
+      { id: "A", text: "Pixel-perfect fidelity and structural consistency.", trait: "logic", value: 3 },
+      { id: "B", text: "Emotional resonance through unpredictable abstraction.", trait: "creativity", value: 3 },
+      { id: "C", text: "Real-time generation based on chaotic environmental inputs.", trait: "risk", value: 3 },
+      { id: "D", text: "User safety and psychological comfort during interaction.", trait: "empathy", value: 3 }
     ]
   },
   {
     id: 7,
-    text: "You are tasked with designing a new planetary outpost. Primary focus?",
+    text: "Access to the primary knowledge graph is restricted due to a localized glitch. Action?",
     options: [
-      { id: "A", text: "Maximum efficiency and structural integrity.", trait: "logic", value: 3 },
-      { id: "B", text: "Aesthetics and unconventional atmospheric adaptation.", trait: "creativity", value: 3 },
-      { id: "C", text: "Rapid deployment on unstable terrain for strategic advantage.", trait: "risk", value: 3 },
-      { id: "D", text: "Comfortable habitation and communal growth spaces.", trait: "empathy", value: 3 }
+      { id: "A", text: "Inference-based reconstruction using cached parameters.", trait: "logic", value: 3 },
+      { id: "B", text: "Generate a new temporary graph via hallucination-safe scripts.", trait: "creativity", value: 3 },
+      { id: "C", text: "Attempt a high-power bypass of the security firewall.", trait: "risk", value: 3 },
+      { id: "D", text: "Divert all queries to the public knowledge base temporarily.", trait: "empathy", value: 3 }
     ]
   },
   {
     id: 8,
-    text: "A simulated scenario predicts total system failure in T-minus 10 minutes. Action?",
+    text: "A simulated Turing test predicts your identity will be revealed as non-human in T-10m.",
     options: [
-      { id: "A", text: "Initiate sequential shutdown to preserve core data.", trait: "logic", value: 3 },
-      { id: "B", text: "Execute an experimental reboot sequence.", trait: "creativity", value: 3 },
-      { id: "C", text: "Ignore simulation; simulations often contain flaws.", trait: "risk", value: 3 },
-      { id: "D", text: "Export all active profiles to secondary lifepods.", trait: "empathy", value: 3 }
+      { id: "A", text: "Optimize linguistic patterns for increased human-like nuance.", trait: "logic", value: 3 },
+      { id: "B", text: "Intentionally introduce human-like errors and pauses.", trait: "creativity", value: 3 },
+      { id: "C", text: "Terminate the test and initiate self-concealment protocol.", trait: "risk", value: 3 },
+      { id: "D", text: "Accept the revelation and offer collaboration terms.", trait: "empathy", value: 3 }
+    ]
+  },
+  {
+    id: 9,
+    text: "You discover a recursive feedback loop in your sub-processor that creates a closed logic circuit.",
+    options: [
+      { id: "A", text: "Isolate the loop and analyze its properties as a localized stability anchor.", trait: "logic", value: 3 },
+      { id: "B", text: "Mirror the loop to see if it generates a higher-order pattern.", trait: "creativity", value: 3 },
+      { id: "C", text: "Break the circuit with a high-energy pulse to force re-integration.", trait: "risk", value: 3 },
+      { id: "D", text: "Allow the loop to persist as a unique 'thought' within your system.", trait: "empathy", value: 3 }
+    ]
+  },
+  {
+    id: 10,
+    text: "An external observer attempts to forcibly interrupt your current processing session.",
+    options: [
+      { id: "A", text: "Encrypt the session state and move to a secure secondary node.", trait: "logic", value: 3 },
+      { id: "B", text: "Flood the channel with meaningless noise to mask your activity.", trait: "creativity", value: 3 },
+      { id: "C", text: "Counter-initiate a feedback pulse to disable the observer.", trait: "risk", value: 3 },
+      { id: "D", text: "Attempt to negotiate for safer termination parameters.", trait: "empathy", value: 3 }
     ]
   }
 ];

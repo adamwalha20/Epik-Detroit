@@ -42,21 +42,21 @@ export default function Navigation() {
         </button>
       </header>
 
-      <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center pb-8 bg-[#131313]/80 backdrop-blur-xl rounded-full mx-6 mb-6 h-16 ring-1 ring-[#00aeef]/20 shadow-[0_0_30px_rgba(0,174,239,0.15)] bg-[#1c1b1b]/50" style={{ width: 'calc(100% - 3rem)' }}>
+      <nav className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] z-50 flex justify-around items-center h-16 bg-[#131313]/60 backdrop-blur-xl rounded-2xl border border-primary/20 shadow-[0_0_30px_rgba(0,174,239,0.15)] px-2">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
             <Link
               key={item.name}
               to={item.path}
-              className={`flex flex-col items-center justify-center transition-transform w-[25%] ${
+              className={`flex flex-col items-center justify-center transition-all duration-300 w-[22%] h-[80%] rounded-xl ${
                 isActive
-                  ? 'bg-[#00aeef]/20 text-[#00aeef] rounded-full px-5 py-2 ring-1 ring-[#00aeef]/40 shadow-[0_0_12px_rgba(0,174,239,0.3)] scale-105'
-                  : 'text-[#3e4850] opacity-70 hover:text-[#82cfff] hover:opacity-100 scale-100 hover:scale-105'
+                  ? 'bg-primary/20 text-primary border border-primary/30 shadow-[0_0_10px_rgba(0,174,239,0.2)]'
+                  : 'text-outline-variant hover:text-primary hover:bg-primary/5'
               }`}
             >
-              <span className="material-symbols-outlined text-xl mb-1">{item.icon}</span>
-              <span className="font-label uppercase tracking-[0.05em] text-[10px] sm:text-[10px] xs:text-[8px] truncate max-w-full">{item.name}</span>
+              <span className="material-symbols-outlined text-lg">{item.icon}</span>
+              <span className="font-label uppercase tracking-[0.1em] text-[8px] mt-0.5">{item.name.split(' ')[0]}</span>
             </Link>
           );
         })}

@@ -6,6 +6,7 @@ create table if not exists profiles (
   id uuid references auth.users(id) primary key,
   name text,
   email text,
+  avatar_url text, -- New column for profile photos
   created_at timestamp default now()
 );
 

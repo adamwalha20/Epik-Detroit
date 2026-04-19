@@ -18,7 +18,10 @@ export default function HUD() {
                 <span className="absolute w-3 h-3 bg-tertiary rounded-full blur-[4px]"></span>
                 <span className="relative w-2 h-2 bg-tertiary rounded-full"></span>
               </div>
-              <h2 className="font-label text-sm uppercase tracking-[0.05em] text-on-surface">Live Feed</h2>
+              <h2 className="font-label text-sm uppercase tracking-[0.05em] text-on-surface flex items-center gap-2">
+                Live Feed
+                <span className="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse shadow-[0_0_8px_rgba(255,183,125,0.6)]"></span>
+              </h2>
             </div>
             
             <div className="space-y-4 font-headline">
@@ -42,16 +45,19 @@ export default function HUD() {
              <div className="absolute top-1/2 left-0 w-8 h-[1px]" style={{background: 'linear-gradient(90deg, #82cfff, transparent)'}}></div>
              <div className="absolute top-1/2 right-0 w-8 h-[1px]" style={{background: 'linear-gradient(270deg, #82cfff, transparent)'}}></div>
              
-             <div className="relative w-48 h-48 rounded-full border-2 border-outline-variant/20 flex items-center justify-center">
-               <svg className="absolute inset-0 w-full h-full transform -rotate-90 animate-[spin_4s_linear_infinite]" viewBox="0 0 100 100">
-                 <circle className="hud-glow opacity-80" cx="50" cy="50" fill="none" r="48" stroke="#82cfff" strokeDasharray="250" strokeDashoffset="60" strokeWidth="2"></circle>
-               </svg>
-               <div className="w-36 h-36 rounded-full border border-primary-container/30 flex items-center justify-center bg-surface-container/50 backdrop-blur-sm">
-                 <div className="text-center font-headline">
-                   <span className="block text-4xl text-primary font-bold">Lvl.42</span>
-                   <span className="block text-xs text-on-surface-variant uppercase tracking-widest mt-1">Prime</span>
-                 </div>
-               </div>
+             <div className="relative w-48 h-48 rounded-full flex items-center justify-center overflow-hidden">
+                <div className="absolute inset-0 rounded-full border border-primary/20"></div>
+                <div className="absolute top-0 left-0 w-full h-[2px] bg-primary/40 blur-[1px] animate-[scan_3s_ease-in-out_infinite] z-20"></div>
+                <svg className="absolute inset-0 w-full h-full transform -rotate-90 animate-[spin_10s_linear_infinite]" viewBox="0 0 100 100">
+                  <circle className="opacity-20" cx="50" cy="50" fill="none" r="48" stroke="#82cfff" strokeDasharray="250" strokeDashoffset="0" strokeWidth="1"></circle>
+                  <circle className="hud-glow opacity-80" cx="50" cy="50" fill="none" r="48" stroke="#82cfff" strokeDasharray="250" strokeDashoffset="180" strokeWidth="2" strokeLinecap="round"></circle>
+                </svg>
+                <div className="w-36 h-36 rounded-full border border-primary-container/30 flex items-center justify-center bg-surface-container/50 backdrop-blur-sm z-10 animate-[pulse-ring_4s_ease-in-out_infinite]">
+                  <div className="text-center font-headline">
+                    <span className="block text-4xl text-primary font-bold">Lvl.42</span>
+                    <span className="block text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">EVAL_SYNC: 98%</span>
+                  </div>
+                </div>
              </div>
           </div>
         </div>

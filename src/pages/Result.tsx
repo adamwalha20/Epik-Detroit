@@ -4,6 +4,9 @@ import { supabase, isMock } from '../lib/supabase';
 
 export default function Result() {
   const [profileData, setProfileData] = useState<any>(null);
+  const [uploading, setUploading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  
   
   useEffect(() => {
     const fetchData = async () => {
@@ -23,8 +26,11 @@ export default function Result() {
         
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
-          const { data } = await supabase.from('quiz_results').select('*, profiles(name)').eq('user_id', user.id).single();
-          if (data) setProfileData({ ...data, name: data.profiles?.name || 'SUBJECT-NULL' });
+          const { data: resultData } = await supabase.from('quiz_results').select('*, profiles(name, avatar_url)').eq('user_id', user.id).single();
+          if (resultData) {
+            setProfileData({ ...resultData, name: resultData.profiles?.name || 'SUBJECT-NULL' });
+            setAvatarUrl(resultData.profiles?.avatar_url || null);
+          }
         }
       } catch (e) {
         console.error(e);
@@ -32,6 +38,43 @@ export default function Result() {
     };
     fetchData();
   }, []);
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      setUploading(true);
+      if (!event.target.files || event.target.files.length === 0) return;
+      const file = event.target.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      if (isMock) {
+        // Mock upload
+        const reader = new FileReader();
+        reader.onload = (e) => setAvatarUrl(e.target?.result as string);
+        reader.readAsDataURL(file);
+        setUploading(false);
+        return;
+      }
+
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error('No user logged in');
+
+      const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file);
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(filePath);
+      
+      const { error: updateError } = await supabase.from('profiles').update({ avatar_url: publicUrl }).eq('id', userData.user.id);
+      if (updateError) throw updateError;
+
+      setAvatarUrl(publicUrl);
+    } catch (error: any) {
+      alert(error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   if (!profileData) return <div className="min-h-screen bg-background flex items-center justify-center text-primary font-headline">SYNCING IDENTITY...</div>;
 
@@ -50,15 +93,21 @@ export default function Result() {
                 <div className="absolute inset-0 rounded-full border-2 border-primary border-t-transparent border-l-transparent transform rotate-45 glow-primary"></div>
                 <div className="absolute inset-4 rounded-full bg-primary-container/5 glow-primary"></div>
                 <div className="absolute inset-6 rounded-full overflow-hidden border border-outline-variant/30 flex items-center justify-center bg-surface-container-highest">
-                  <span className="material-symbols-outlined text-8xl text-primary/50" style={{ fontVariationSettings: "'FILL' 1" }}>smart_toy</span>
+                  {avatarUrl ? (
+                    <img src={avatarUrl} alt="Identity" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="material-symbols-outlined text-8xl text-primary/50" style={{ fontVariationSettings: "'FILL' 1" }}>smart_toy</span>
+                  )}
+                  {uploading && <div className="absolute inset-0 bg-background/60 flex items-center justify-center"><div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div></div>}
                 </div>
                 <div className="absolute bottom-4 right-4 w-4 h-4 bg-secondary-container rounded-full shadow-[0_0_10px_rgba(0,227,253,0.8)]">
                   <div className="absolute inset-0 bg-secondary-container rounded-full animate-ping opacity-75"></div>
                 </div>
               </div>
               <div className="text-center font-headline uppercase tracking-[0.05em] flex flex-col gap-2 w-full">
-                <h1 className="text-3xl text-on-surface font-semibold">{profileData.ai_type}</h1>
-                <p className="text-on-surface-variant text-sm border-b border-primary/20 pb-2 mb-2">AUTONOMOUS CONSTRUCT</p>
+                <div className="text-xs text-primary tracking-[0.2em] mb-1">SUBJECT_IDENTITY</div>
+                <h1 className="text-3xl text-on-surface font-semibold">{profileData.name}</h1>
+                <p className="text-on-surface-variant text-sm border-b border-primary/20 pb-2 mb-2 font-light">{profileData.ai_type}</p>
                 <div className="mt-4 flex flex-col gap-1 items-center">
                   <div className="w-4/5 h-8 opacity-70" style={{ backgroundImage: 'repeating-linear-gradient(90deg, var(--color-on-surface) 0, var(--color-on-surface) 2px, transparent 2px, transparent 4px, var(--color-on-surface) 4px, var(--color-on-surface) 5px, transparent 5px, transparent 8px)' }}></div>
                   <span className="text-xs text-primary mt-1 tracking-widest">ID-8849-{profileData.name.substring(0,3).toUpperCase()}-OMEGA</span>
@@ -70,7 +119,7 @@ export default function Result() {
               <div className="grid grid-cols-2 gap-6">
                 <div className="bg-surface p-6 border border-outline-variant/15 relative overflow-hidden group">
                   <div className="absolute top-0 left-0 w-full h-[1px] bg-primary/30"></div>
-                  <span className="font-label text-xs text-on-surface-variant uppercase tracking-widest block mb-4">Trust Index</span>
+                  <span className="font-label text-xs text-on-surface-variant uppercase tracking-widest block mb-4">Trust Index / Success Rate</span>
                   <div className="flex items-end gap-2">
                     <span className="font-headline text-4xl text-primary font-light">{profileData.score}</span>
                     <span className="text-on-surface-variant text-sm pb-1">%</span>
@@ -106,12 +155,28 @@ export default function Result() {
               </div>
               
               <div className="mt-8 pt-6 border-t border-outline-variant/15 flex justify-end">
-                <button className="relative group bg-transparent border border-primary/50 text-primary font-label text-sm uppercase px-8 py-3 tracking-widest hover:bg-primary-container/10 transition-all duration-300 overflow-hidden">
-                  <span className="relative z-10 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[18px]">download</span>
-                    EXPORT IDENTITY
-                  </span>
-                  <div className="absolute inset-0 bg-primary-container/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
+                <div className="relative">
+                  <input 
+                    type="file" 
+                    id="avatar-upload" 
+                    accept="image/*" 
+                    onChange={handleFileUpload} 
+                    className="hidden" 
+                  />
+                  <label 
+                    htmlFor="avatar-upload"
+                    className="relative group bg-transparent border border-primary/50 text-primary font-label text-sm uppercase px-8 py-3 tracking-widest hover:bg-primary-container/10 transition-all duration-300 overflow-hidden cursor-pointer flex items-center gap-2"
+                  >
+                    <span className="relative z-10 flex items-center gap-2">
+                      <span className="material-symbols-outlined text-[18px]">upload_file</span>
+                      {avatarUrl ? 'UPDATE IDENTITY' : 'IMPORT PHOTO'}
+                    </span>
+                    <div className="absolute inset-0 bg-primary-container/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
+                  </label>
+                </div>
+                
+                <button className="relative group bg-surface-container-highest border border-outline-variant/30 text-on-surface-variant font-label text-[10px] uppercase px-4 py-2 tracking-widest hover:border-primary/50 transition-all duration-300 ml-4">
+                  DOWNLOAD LINK
                 </button>
               </div>
             </div>

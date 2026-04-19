@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase, isMock } from '../lib/supabase';
 
 export default function Login() {
@@ -68,7 +68,14 @@ export default function Login() {
             <p className="font-body text-on-surface-variant text-sm mt-2">AUTHENTICATION PROTOCOL REQUIRED</p>
           </div>
           
-          <div className="space-y-8 relative z-20">
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              // Default to login on enter
+              handleAuth('login');
+            }} 
+            className="space-y-8 relative z-20"
+          >
             <div className="space-y-6">
               <div className="space-y-4">
                 <div className="relative group">
@@ -77,6 +84,7 @@ export default function Login() {
                     <span className="material-symbols-outlined absolute left-0 text-outline-variant text-sm group-focus-within:text-primary transition-colors">badge</span>
                     <input 
                       type="email" 
+                      autoComplete="username"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       className="w-full bg-transparent border-0 border-b-2 border-outline-variant/30 text-on-surface font-body text-base pl-8 pb-2 focus:ring-0 focus:border-primary transition-all placeholder-outline-variant/50" 
@@ -91,6 +99,7 @@ export default function Login() {
                     <span className="material-symbols-outlined absolute left-0 text-outline-variant text-sm group-focus-within:text-primary transition-colors">key</span>
                     <input 
                       type="password" 
+                      autoComplete="current-password"
                       value={password}
                       onChange={e => setPassword(e.target.value)}
                       className="w-full bg-transparent border-0 border-b-2 border-outline-variant/30 text-on-surface font-body text-base pl-8 pb-2 focus:ring-0 focus:border-primary transition-all placeholder-outline-variant/50" 
@@ -104,8 +113,7 @@ export default function Login() {
               
               <div className="pt-4 flex flex-col gap-4">
                 <button 
-                  type="button" 
-                  onClick={() => handleAuth('login')}
+                  type="submit"
                   disabled={loading}
                   className="relative w-full py-3 px-6 rounded border border-primary/50 text-primary font-label text-sm uppercase tracking-[0.05em] hover:bg-primary-container/10 hover:shadow-[0_0_12px_rgba(0,174,239,0.4)] transition-all duration-300 group overflow-hidden"
                 >
@@ -118,17 +126,15 @@ export default function Login() {
                   <span className="font-body text-xs text-outline-variant">OR</span>
                 </div>
                 
-                <button 
-                  type="button" 
-                  onClick={() => handleAuth('register')}
-                  disabled={loading}
-                  className="relative w-full py-3 px-6 rounded border border-outline-variant/30 text-on-surface-variant font-label text-sm uppercase tracking-[0.05em] hover:border-secondary/50 hover:text-secondary hover:bg-secondary-container/5 transition-all duration-300"
+                <Link 
+                  to="/signup"
+                  className="relative w-full py-3 px-6 rounded border border-outline-variant/30 text-on-surface-variant font-label text-sm uppercase tracking-[0.05em] hover:border-secondary/50 hover:text-secondary hover:bg-secondary-container/5 transition-all duration-300 flex items-center justify-center"
                 >
                   EXEC: Register Subject
-                </button>
+                </Link>
               </div>
             </div>
-          </div>
+          </form>
           
           <div className="mt-8 pt-4 border-t border-outline-variant/10 text-left">
             <p className="font-label text-[10px] text-outline-variant uppercase tracking-[0.05em] opacity-50">&gt; CONNECTION_SECURE</p>

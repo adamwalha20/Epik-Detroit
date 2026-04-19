@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Splash from './pages/Splash';
 import Login from './pages/Login';
+import SignUp from './pages/SignUp';
 import Quiz from './pages/Quiz';
 import Result from './pages/Result';
 import Leaderboard from './pages/Leaderboard';
@@ -15,6 +16,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Splash />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/result" element={<Result />} />
         <Route path="/leaderboard" element={<Leaderboard />} />

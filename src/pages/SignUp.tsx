@@ -1,0 +1,162 @@
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { supabase, isMock } from '../lib/supabase';
+
+export default function SignUp() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      if (isMock) {
+        // Mock registration
+        localStorage.setItem('epik_user_name', name);
+        setTimeout(() => navigate('/quiz'), 500);
+        return;
+      }
+      
+      const { error, data } = await supabase.auth.signUp({ 
+        email, 
+        password,
+        options: {
+          data: {
+            full_name: name
+          }
+        }
+      });
+      
+      if (error) throw error;
+      
+      if (data.user) {
+        // Profile insertion happened via trigger or manual insert
+        const { error: profileError } = await supabase.from('profiles').upsert({ 
+          id: data.user.id, 
+          email, 
+          name 
+        });
+        if (profileError) console.error("Profile sync error:", profileError);
+        
+        navigate('/quiz');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Registration failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="bg-surface text-on-surface font-body min-h-screen overflow-hidden relative selection:bg-primary-container selection:text-on-primary-container">
+      <div className="absolute inset-0 crt-overlay z-50 pointer-events-none"></div>
+      
+      <div className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] rounded-full bg-primary-container opacity-[0.03] blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-[30vw] h-[30vw] rounded-full bg-secondary-container opacity-[0.02] blur-[80px] pointer-events-none"></div>
+      
+      <header className="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-40 hidden md:flex">
+        <div className="flex items-center gap-2 text-primary font-headline text-xs tracking-[0.1em] uppercase drop-shadow-[0_0_10px_rgba(0,174,239,0.5)]">
+          <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>verified_user</span>
+          <span>CREATING NEW UPLINK</span>
+        </div>
+        <span className="material-symbols-outlined text-outline-variant text-sm">sensors</span>
+      </header>
+      
+      <main className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6">
+        <div className="relative w-full max-w-md bg-surface-container-low rounded-lg p-8 shadow-[0_0_40px_rgba(0,0,0,0.8)] overflow-hidden">
+          <div className="absolute inset-0 bg-surface-container-lowest/60 backdrop-blur-[20px] -z-10"></div>
+          <div className="scan-line h-px w-full absolute top-0 left-0 animate-[scan_4s_linear_infinite]" style={{background: 'linear-gradient(to right, transparent, rgba(130, 207, 255, 0.5), transparent)'}}></div>
+          
+          <div className="mb-10 text-center relative z-20">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-surface-container-highest mb-6 relative">
+              <div className="absolute inset-0 rounded-full border border-outline-variant/20"></div>
+              <div className="absolute inset-0 rounded-full border border-t-secondary shadow-[0_0_12px_rgba(0,227,253,0.4)] animate-[spin_6s_linear_infinite_reverse]"></div>
+              <span className="material-symbols-outlined text-secondary text-3xl">add_moderator</span>
+            </div>
+            <h1 className="font-headline text-3xl font-bold tracking-tight text-on-surface">SUBJECT ENROLLMENT</h1>
+            <p className="font-body text-on-surface-variant text-sm mt-2">INITIALIZING IDENTITY PARAMETERS</p>
+          </div>
+          
+          <form onSubmit={handleSignUp} className="space-y-6 relative z-20">
+            <div className="space-y-4">
+              <div className="relative group">
+                <label className="block font-label text-xs uppercase tracking-[0.05em] text-outline-variant mb-1 group-focus-within:text-primary transition-colors">FULL_NAME</label>
+                <div className="relative flex items-center">
+                  <span className="material-symbols-outlined absolute left-0 text-outline-variant text-sm group-focus-within:text-primary transition-colors">person</span>
+                  <input 
+                    type="text" 
+                    required
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    className="w-full bg-transparent border-0 border-b-2 border-outline-variant/30 text-on-surface font-body text-base pl-8 pb-2 focus:ring-0 focus:border-primary transition-all placeholder-outline-variant/50" 
+                    placeholder="Enter full name..." 
+                  />
+                </div>
+              </div>
+
+              <div className="relative group">
+                <label className="block font-label text-xs uppercase tracking-[0.05em] text-outline-variant mb-1 group-focus-within:text-primary transition-colors">EMAIL_UPLINK</label>
+                <div className="relative flex items-center">
+                  <span className="material-symbols-outlined absolute left-0 text-outline-variant text-sm group-focus-within:text-primary transition-colors">alternate_email</span>
+                  <input 
+                    type="email" 
+                    required
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    className="w-full bg-transparent border-0 border-b-2 border-outline-variant/30 text-on-surface font-body text-base pl-8 pb-2 focus:ring-0 focus:border-primary transition-all placeholder-outline-variant/50" 
+                    placeholder="Enter email address..." 
+                  />
+                </div>
+              </div>
+              
+              <div className="relative group">
+                <label className="block font-label text-xs uppercase tracking-[0.05em] text-outline-variant mb-1 group-focus-within:text-primary transition-colors">PASSKEY_SECRET</label>
+                <div className="relative flex items-center">
+                  <span className="material-symbols-outlined absolute left-0 text-outline-variant text-sm group-focus-within:text-primary transition-colors">lock</span>
+                  <input 
+                    type="password" 
+                    required
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    className="w-full bg-transparent border-0 border-b-2 border-outline-variant/30 text-on-surface font-body text-base pl-8 pb-2 focus:ring-0 focus:border-primary transition-all placeholder-outline-variant/50" 
+                    placeholder="Create security hash..." 
+                  />
+                </div>
+              </div>
+            </div>
+            
+            {error && <div className="text-error text-xs font-label uppercase tracking-wider">{error}</div>}
+            
+            <div className="pt-4 flex flex-col gap-4">
+              <button 
+                type="submit"
+                disabled={loading}
+                className="relative w-full py-3 px-6 rounded border border-primary/50 text-primary font-label text-sm uppercase tracking-[0.05em] hover:bg-primary-container/10 hover:shadow-[0_0_12px_rgba(0,174,239,0.4)] transition-all duration-300 group overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  {loading ? 'INITIALIZING...' : 'EXEC: Create Identity'}
+                </span>
+              </button>
+              
+              <div className="text-center">
+                <Link to="/login" className="font-body text-xs text-outline-variant hover:text-primary transition-colors uppercase tracking-widest">
+                  ALREADY ENROLLED? LOGIN
+                </Link>
+              </div>
+            </div>
+          </form>
+          
+          <div className="mt-8 pt-4 border-t border-outline-variant/10 text-left">
+            <p className="font-label text-[10px] text-outline-variant uppercase tracking-[0.05em] opacity-50">&gt; ENCRYPTION_STRENGTH: 4096-BIT</p>
+            <p className="font-label text-[10px] text-outline-variant uppercase tracking-[0.05em] opacity-50">&gt; PRIVACY_PROTOCOL: ACTIVE</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}

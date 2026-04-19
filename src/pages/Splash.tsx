@@ -1,22 +1,40 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
 export default function Splash() {
   const navigate = useNavigate();
+  const [progress, setProgress] = useState(0);
+  const [status, setStatus] = useState('INITIALIZING BOOT SEQUENCE...');
 
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setTimeout(() => {
-        if (session) {
-          navigate('/quiz');
-        } else {
-          navigate('/login');
-        }
-      }, 2500);
-    };
-    checkSession();
+    const stages = [
+      { p: 20, s: 'LOADING NEURAL KERNEL...' },
+      { p: 45, s: 'SYNCING KINETIC LENS...' },
+      { p: 70, s: 'CALIBRATING HUD OVERLAY...' },
+      { p: 100, s: 'CONNECTION SECURE' }
+    ];
+
+    let currentStage = 0;
+    const interval = setInterval(() => {
+      if (currentStage < stages.length) {
+        setProgress(stages[currentStage].p);
+        setStatus(stages[currentStage].s);
+        currentStage++;
+      } else {
+        clearInterval(interval);
+        setTimeout(async () => {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            navigate('/hud');
+          } else {
+            navigate('/login');
+          }
+        }, 800);
+      }
+    }, 600);
+
+    return () => clearInterval(interval);
   }, [navigate]);
 
   return (
@@ -58,19 +76,27 @@ export default function Splash() {
           </h1>
           
           <div className="flex flex-col items-center space-y-2 mt-8">
-            <div className="flex items-center space-x-3 bg-surface-container-low px-4 py-1.5 rounded-sm border-b border-primary/30">
-              <span className="material-symbols-outlined text-[14px] text-tertiary animate-spin" style={{ fontVariationSettings: "'FILL' 1" }}>
-                change_circle
-              </span>
-              <span className="font-label text-[10px] md:text-xs text-on-surface-variant uppercase tracking-[0.05em]">
-                INITIALIZING SYSTEM...
-              </span>
-            </div>
-            <div className="flex items-center space-x-3 mt-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-secondary-container shadow-[0_0_5px_#00e3fd] animate-pulse"></span>
-              <span className="font-label text-[11px] md:text-sm text-primary uppercase tracking-[0.05em] glow-text">
-                EPIK AI PROTOCOL LOADED
-              </span>
+            <div className="flex flex-col items-center space-y-4 mt-8 w-64">
+              <div className="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-primary shadow-[0_0_10px_#82cfff] transition-all duration-500 ease-out" 
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+              <div className="flex items-center space-x-3 bg-surface-container-low px-4 py-1.5 rounded-sm border-b border-primary/30 min-w-[200px] justify-center">
+                <span className="material-symbols-outlined text-[14px] text-tertiary animate-spin" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  change_circle
+                </span>
+                <span className="font-label text-[10px] md:text-xs text-on-surface-variant uppercase tracking-[0.1em]">
+                  {status}
+                </span>
+              </div>
+              <div className="flex items-center space-x-3 mt-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-secondary-container shadow-[0_0_5px_#00e3fd] animate-pulse"></span>
+                <span className="font-label text-[11px] md:text-sm text-primary uppercase tracking-[0.1em] glow-text">
+                  EPIK AI PROTOCOL {progress === 100 ? 'SYNCHRONIZED' : 'LOADING'}
+                </span>
+              </div>
             </div>
           </div>
         </div>

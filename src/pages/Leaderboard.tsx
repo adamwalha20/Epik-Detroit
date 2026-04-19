@@ -38,7 +38,7 @@ export default function Leaderboard() {
         <div className="absolute w-[600px] h-[600px] bg-secondary-container rounded-full blur-[120px] opacity-5 bottom-[-10%] right-[-10%]"></div>
       </div>
 
-      <main className="relative z-10 pt-28 pb-32 px-4 md:px-8 max-w-7xl mx-auto space-y-12">
+      <main className="relative z-10 pt-32 pb-32 px-4 md:px-8 max-w-7xl mx-auto space-y-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <div className="flex items-center gap-3 mb-2 opacity-70">

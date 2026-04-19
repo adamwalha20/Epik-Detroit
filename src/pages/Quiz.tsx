@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import { supabase, isMock } from '../lib/supabase';
@@ -11,12 +11,31 @@ export default function Quiz() {
   const [scores, setScores] = useState({ logic: 0, creativity: 0, risk: 0, empathy: 0 });
   const [easterEggClicks, setEasterEggClicks] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(10);
+
+  useEffect(() => {
+    if (isSubmitting) return;
+    
+    if (timeLeft === 0) {
+      // Auto-advance if time runs out
+      const defaultTrait = question.options[0].trait;
+      handleOptionClick(defaultTrait, 0, "TIME_EXPIRED");
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => Math.max(0, prev - 0.1));
+    }, 100);
+
+    return () => clearInterval(timer);
+  }, [timeLeft, isSubmitting]);
 
   const question = QUIZ_QUESTIONS[currentQuestionIndex];
 
   const handleOptionClick = async (trait: string, value: number, optionText: string) => {
     const newScores = { ...scores, [trait]: scores[trait as keyof typeof scores] + value };
     setScores(newScores);
+    setTimeLeft(10); // Reset timer
     
     // Save decision history
     if (!isMock) {
@@ -83,10 +102,10 @@ export default function Quiz() {
   };
 
   return (
-    <div className="bg-background text-on-background font-body min-h-screen overflow-hidden antialiased selection:bg-primary-container selection:text-on-primary-container">
+    <div className="bg-background text-on-background font-body min-h-screen overflow-y-auto antialiased selection:bg-primary-container selection:text-on-primary-container scroll-smooth">
       <Navigation />
       
-      <main className="relative h-screen w-full flex items-center justify-center p-6 hud-grid" style={{backgroundImage: 'linear-gradient(to right, rgba(62, 72, 80, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(62, 72, 80, 0.05) 1px, transparent 1px)', backgroundSize: '40px 40px'}}>
+      <main className="relative min-h-screen w-full flex flex-col items-center md:justify-center p-6 pb-40 hud-grid" style={{backgroundImage: 'linear-gradient(to right, rgba(62, 72, 80, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(62, 72, 80, 0.05) 1px, transparent 1px)', backgroundSize: '40px 40px'}}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,174,239,0.05)_0%,transparent_70%)] pointer-events-none"></div>
         
         <div className="relative w-full max-w-2xl h-[600px] flex items-center justify-center">
@@ -94,24 +113,49 @@ export default function Quiz() {
           <div className="absolute w-[140%] h-[140%] rounded-full border border-outline-variant/5 pointer-events-none border-dashed border-[1px]"></div>
           
           <div className="relative w-80 h-80 rounded-full bg-surface-container-low/80 backdrop-blur-xl flex flex-col items-center justify-center p-8 z-10 box-shadow-[0_0_40px_rgba(0,174,239,0.15),inset_0_0_20px_rgba(0,174,239,0.1)] border border-primary/20">
+            {/* Circular Timer SVG */}
+            <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 100 100">
+              <circle
+                cx="50"
+                cy="50"
+                r="48"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1"
+                className="text-primary/10"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="48"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeDasharray="301.59"
+                strokeDashoffset={301.59 * (1 - timeLeft / 10)}
+                className="text-primary transition-all duration-100 ease-linear"
+                style={{ filter: 'drop-shadow(0 0 4px var(--color-primary))' }}
+              />
+            </svg>
+
             <span 
               onClick={handleEasterEggClick}
-              className="material-symbols-outlined text-primary-container text-4xl mb-4 cursor-pointer hover:scale-110 transition-transform" 
+              className="material-symbols-outlined text-primary-container text-4xl mb-4 cursor-pointer hover:scale-110 transition-transform relative z-10" 
               style={{ fontVariationSettings: "'FILL' 1" }}
             >
               psychology
             </span>
-            <h1 className="font-headline text-lg text-center text-on-surface uppercase tracking-wider mb-2">
+            <h1 className="font-headline text-lg text-center text-on-surface uppercase tracking-wider mb-2 relative z-10">
               AI EVALUATION PROTOCOL
             </h1>
-            <p className="font-body text-sm text-center text-on-surface-variant">
+            <p className="font-body text-sm text-center text-on-surface-variant relative z-10">
               {question.text}
             </p>
             
-            <div className="absolute bottom-6 flex items-center gap-2 bg-surface-container-highest px-4 py-1.5 rounded-full border border-outline-variant/30">
+            <div className="absolute bottom-6 flex items-center gap-2 bg-surface-container-highest px-4 py-1.5 rounded-full border border-outline-variant/30 z-10">
               <div className="w-1.5 h-1.5 rounded-full bg-secondary-container"></div>
               <span className="font-headline text-[10px] text-secondary tracking-widest uppercase">
-                {currentQuestionIndex + 1} / {QUIZ_QUESTIONS.length} INTEGRATING
+                {currentQuestionIndex + 1} / {QUIZ_QUESTIONS.length} INTEGRATING | {Math.ceil(timeLeft)}s
               </span>
             </div>
           </div>
@@ -159,20 +203,20 @@ export default function Quiz() {
               </div>
             </button>
           </div>
-          
-          {/* Mobile Linear Options List */}
-          <div className="md:hidden absolute -bottom-32 flex flex-col gap-3 w-full z-20">
-            {question.options.map((opt) => (
-              <button 
-                key={opt.id}
-                onClick={() => handleOptionClick(opt.trait, opt.value, opt.text)}
-                className="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-3 rounded-lg border border-outline-variant/20 flex gap-3 text-left w-full hover:border-primary/50 hover:bg-surface-container-low"
-              >
-                <span className="font-headline font-bold text-primary">{opt.id}</span>
-                <span className="font-body text-sm text-on-surface-variant">{opt.text}</span>
-              </button>
-            ))}
-          </div>
+        </div>
+
+        {/* Mobile Linear Options List - Moved outside for proper stacking */}
+        <div className="md:hidden relative mt-4 flex flex-col gap-4 w-full max-w-sm px-4 z-20">
+          {question.options.map((opt) => (
+            <button 
+              key={opt.id}
+              onClick={() => handleOptionClick(opt.trait, opt.value, opt.text)}
+              className="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-3 rounded-lg border border-outline-variant/20 flex gap-3 text-left w-full hover:border-primary/50 hover:bg-surface-container-low transition-all active:scale-95"
+            >
+              <span className="font-headline font-bold text-primary">{opt.id}</span>
+              <span className="font-body text-sm text-on-surface-variant">{opt.text}</span>
+            </button>
+          ))}
         </div>
       </main>
     </div>
