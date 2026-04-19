@@ -14,13 +14,15 @@ export default function Result() {
         if (isMock) {
           const localStr = localStorage.getItem('epik_result');
           const local = localStr ? JSON.parse(localStr) : null;
-          setProfileData({
+          const mockData = {
             ai_type: local?.ai_type || 'ANALYST',
             trust_level: local?.trust_level || 'MEDIUM',
             stability_index: local?.stability_index || 75.3,
             score: local?.score || 88.4,
             name: 'SUBJECT-NULL'
-          });
+          };
+          setProfileData(mockData);
+          document.title = `EPIK_DETROIT_CERTIFICATE_${mockData.name.replace(/\s+/g, '_').toUpperCase()}`;
           return;
         }
         
@@ -28,8 +30,10 @@ export default function Result() {
         if (user) {
           const { data: resultData } = await supabase.from('quiz_results').select('*, profiles(name, avatar_url)').eq('user_id', user.id).single();
           if (resultData) {
-            setProfileData({ ...resultData, name: resultData.profiles?.name || 'SUBJECT-NULL' });
+            const data = { ...resultData, name: resultData.profiles?.name || 'SUBJECT-NULL' };
+            setProfileData(data);
             setAvatarUrl(resultData.profiles?.avatar_url || null);
+            document.title = `EPIK_DETROIT_CERTIFICATE_${data.name.replace(/\s+/g, '_').toUpperCase()}`;
           }
         }
       } catch (e) {
@@ -111,14 +115,18 @@ export default function Result() {
                 <div className="absolute inset-0 rounded-full border border-primary/20"></div>
                 <div className="absolute inset-0 rounded-full border-2 border-primary border-t-transparent border-l-transparent transform rotate-45 glow-primary animate-pulse"></div>
                 <div className="absolute inset-4 rounded-full bg-primary/5 glow-primary"></div>
-                <div className="absolute inset-6 rounded-full overflow-hidden border border-primary/30 flex items-center justify-center bg-[#1a1a1a]">
+                <label htmlFor="avatar-upload" className="absolute inset-6 rounded-full overflow-hidden border border-primary/30 flex items-center justify-center bg-[#1a1a1a] cursor-pointer group hover:border-primary transition-all">
                   {avatarUrl ? (
-                    <img src={avatarUrl} alt="Identity" className="w-full h-full object-cover" />
+                    <img src={avatarUrl} alt="Identity" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   ) : (
-                    <span className="material-symbols-outlined text-8xl text-primary/30" style={{ fontVariationSettings: "'FILL' 1" }}>smart_toy</span>
+                    <span className="material-symbols-outlined text-8xl text-primary/30 group-hover:text-primary/50" style={{ fontVariationSettings: "'FILL' 1" }}>smart_toy</span>
                   )}
+                  <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity flex-col">
+                    <span className="material-symbols-outlined text-white text-3xl">add_a_photo</span>
+                    <span className="text-[8px] text-white font-bold tracking-[0.2em] mt-1">UPDATE PHOTON</span>
+                  </div>
                   {uploading && <div className="absolute inset-0 bg-background/60 flex items-center justify-center"><div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div></div>}
-                </div>
+                </label>
                 {/* Status Indicator */}
                 <div className="absolute bottom-4 right-4 w-5 h-5 bg-[#00e3fd] rounded-full shadow-[0_0_15px_rgba(0,227,253,0.8)] border-2 border-[#131313]">
                   <div className="absolute inset-0 bg-[#00e3fd] rounded-full animate-ping opacity-75"></div>
@@ -177,14 +185,14 @@ export default function Result() {
               </div>
               
               {/* Footer Actions / Verification */}
-              <div className="mt-8 pt-6 border-t border-primary/20 flex justify-between items-center no-print">
-                <div className="flex flex-col">
+              <div className="mt-8 pt-6 border-t border-primary/20 flex flex-col sm:flex-row justify-between items-center no-print gap-6">
+                <div className="flex flex-col items-center sm:items-start">
                   <span className="text-[9px] font-label text-primary tracking-[0.2em] font-bold">AUTHENTICITY_VERIFIED</span>
                   <span className="text-[8px] font-label text-on-surface-variant tracking-[0.1em] opacity-40">ENCRYPTION: SH-256 | DETROIT_CORE</span>
                 </div>
                 
-                <div className="flex gap-4">
-                  <div className="relative">
+                <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                  <div className="relative w-full sm:w-auto">
                     <input 
                       type="file" 
                       id="avatar-upload" 
@@ -194,7 +202,7 @@ export default function Result() {
                     />
                     <label 
                       htmlFor="avatar-upload"
-                      className="relative group bg-transparent border border-primary/50 text-white font-label text-[10px] uppercase px-6 py-2.5 tracking-widest hover:bg-primary/10 transition-all duration-300 cursor-pointer flex items-center gap-2 border-dashed"
+                      className="relative group bg-transparent border border-primary/50 text-white font-label text-[10px] uppercase px-6 py-2.5 tracking-widest hover:bg-primary/10 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 border-dashed w-full sm:w-auto"
                     >
                       <span className="material-symbols-outlined text-[16px] text-primary">add_a_photo</span>
                       {avatarUrl ? 'REFRESH PHOTO' : 'IMPORT IDENTITY'}
@@ -205,7 +213,7 @@ export default function Result() {
                     onClick={() => {
                       window.print();
                     }}
-                    className="relative group bg-primary border border-primary text-[#131313] font-label text-[10px] uppercase px-6 py-2.5 tracking-widest hover:bg-white hover:border-white transition-all duration-300 flex items-center gap-2 font-bold shadow-[0_0_20px_rgba(0,174,239,0.3)]"
+                    className="relative group bg-primary border border-primary text-[#131313] font-label text-[10px] uppercase px-8 py-2.5 tracking-widest hover:bg-white hover:border-white transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-[0_0_20px_rgba(0,174,239,0.3)] w-full sm:w-auto"
                   >
                     <span className="material-symbols-outlined text-[16px]">file_download</span>
                     DOWNLOAD CERTIFICATE
