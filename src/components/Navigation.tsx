@@ -14,7 +14,8 @@ export default function Navigation() {
     <>
       <header className="hidden md:flex fixed top-0 left-0 w-full z-50 items-center justify-between px-6 py-4 bg-[#131313]/60 backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)] border-b border-[#3e4850]/20">
         <div className="flex items-center gap-4">
-          <span className="material-symbols-outlined text-primary-container text-2xl">lens</span>
+          <img src="/club-logo.png" alt="Club Logo" className="h-10 w-auto opacity-90 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" />
+          <div className="h-6 w-[1px] bg-primary/20 mx-1"></div>
           <h1 className="font-headline font-bold text-primary-container tracking-tighter drop-shadow-[0_0_10px_rgba(0,174,239,0.5)] text-xl">
             SYSTEM STATUS: ACTIVE
           </h1>
