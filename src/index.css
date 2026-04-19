@@ -42,6 +42,9 @@ body {
 .scan-line-bg {
   background-image: repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(229, 226, 225, 0.02) 2px, rgba(229, 226, 225, 0.02) 4px);
 }
+.scan-line-horizontal {
+  animation: scan-h 3s linear infinite;
+}
 .crt-overlay {
   background: repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(229, 226, 225, 0.02) 2px, rgba(229, 226, 225, 0.02) 4px);
   pointer-events: none;
@@ -93,4 +96,11 @@ body {
   60% { transform: translate(2px, 2px) }
   80% { transform: translate(2px, -2px) }
   100% { transform: translate(0) }
+}
+
+@keyframes scan-h {
+  0% { top: 0; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
 }

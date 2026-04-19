@@ -5,14 +5,15 @@ import { supabase } from '../lib/supabase';
 export default function Splash() {
   const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
-  const [status, setStatus] = useState('INITIALIZING BOOT SEQUENCE...');
+  const [status, setStatus] = useState('SYNCING EVENT PROTOCOLS...');
 
   useEffect(() => {
     const stages = [
-      { p: 20, s: 'LOADING NEURAL KERNEL...' },
-      { p: 45, s: 'SYNCING KINETIC LENS...' },
-      { p: 70, s: 'CALIBRATING HUD OVERLAY...' },
-      { p: 100, s: 'CONNECTION SECURE' }
+      { p: 15, s: 'INITIALIZING GEN-AI CORE...' },
+      { p: 35, s: 'ESTABLISHING ISIMS UPLINK...' },
+      { p: 60, s: 'LOADING EVENT MANIFEST...' },
+      { p: 85, s: 'CONFIGURING WORKSHOP MODULES...' },
+      { p: 100, s: 'DETROIT PROTOCOL READY' }
     ];
 
     let currentStage = 0;
@@ -30,87 +31,126 @@ export default function Splash() {
           } else {
             navigate('/login');
           }
-        }, 800);
+        }, 1000);
       }
-    }, 600);
+    }, 500);
 
     return () => clearInterval(interval);
   }, [navigate]);
 
   return (
-    <div className="bg-surface min-h-screen flex items-center justify-center relative font-body antialiased">
-      <div className="crt-overlay"></div>
+    <div className="bg-[#0a192f] min-h-screen flex items-center justify-center relative font-body antialiased overflow-hidden">
+      {/* Background Ambience */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0a192f] via-[#0d2a4a] to-[#0a192f]"></div>
+      <div className="crt-overlay opacity-20"></div>
       
-      <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
-        <div className="w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] rounded-full bg-primary-container blur-[150px]"></div>
+      {/* HUD Atmosphere Elements */}
+      <div className="absolute top-[10%] left-[5%] w-[40%] h-[1px] bg-primary/20"></div>
+      <div className="absolute bottom-[10%] right-[5%] w-[40%] h-[1px] bg-primary/20"></div>
+      <div className="absolute top-1/2 left-4 -translate-y-1/2 flex flex-col gap-8 opacity-20">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="w-1 h-1 bg-primary rounded-full"></div>
+        ))}
       </div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-2xl px-6">
-        <div className="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center mb-12">
-          {/* Rings */}
-          <div className="absolute inset-0 rounded-full border border-outline-variant/20"></div>
-          <div className="absolute inset-4 rounded-full border border-outline-variant/30"></div>
-          <div
-            className="absolute inset-8 rounded-full border-2 border-primary ring-glow opacity-80 animate-[spin_4s_linear_infinite]"
-            style={{ borderTopColor: 'transparent', borderRightColor: 'transparent', transform: 'rotate(45deg)' }}
-          ></div>
-          <div className="absolute inset-8 rounded-full border border-primary/40 ring-glow"></div>
-          
-          <div className="absolute inset-16 rounded-full border border-surface-tint/50 bg-surface-container-lowest/60 backdrop-blur-[20px] flex items-center justify-center">
-            <div className="w-2 h-2 rounded-full bg-secondary-container shadow-[0_0_8px_#00e3fd]"></div>
+      <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-4xl px-8">
+        {/* Top Logos */}
+        <div className="absolute top-[-150px] w-full flex justify-between items-center opacity-80">
+          <div className="flex items-center gap-3">
+            <img src="/club-logo.png" alt="EPIK Tunisia" className="h-10 w-auto" />
+            <div className="flex flex-col">
+              <span className="text-[10px] text-white font-bold tracking-[0.2em]">TUNISIA</span>
+              <span className="text-[8px] text-primary tracking-[0.1em]">EPIK LEADERS</span>
+            </div>
           </div>
-          
-          {/* Crosshairs */}
-          <div className="absolute w-full h-[1px] bg-outline-variant/15 top-1/2 -translate-y-1/2"></div>
-          <div className="absolute h-full w-[1px] bg-outline-variant/15 left-1/2 -translate-x-1/2"></div>
-          
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-3 bg-primary"></div>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-1.5 h-3 bg-primary"></div>
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-1.5 bg-primary"></div>
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3 h-1.5 bg-primary"></div>
+          <div className="flex items-center gap-3">
+            <div className="flex flex-col text-right">
+              <span className="text-[10px] text-white font-bold tracking-[0.2em]">ISIMS</span>
+              <span className="text-[8px] text-primary tracking-[0.1em]">BRANCH</span>
+            </div>
+            <div className="w-10 h-10 rounded-full border border-primary/40 flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-primary rounded-sm rotate-45"></div>
+            </div>
+          </div>
         </div>
 
-        <div className="flex flex-col items-center text-center space-y-6">
-          <h1 className="font-headline text-5xl md:text-7xl font-light tracking-[0.2em] text-primary glow-text uppercase">
-            EPIK AI
-          </h1>
+        {/* Main Branding */}
+        <div className="text-center mb-16 relative">
+          <div className="flex flex-col items-center">
+            <div className="relative">
+              <h1 className="font-headline text-7xl md:text-9xl font-bold text-white tracking-[0.15em] leading-none mb-2">
+                DETR<span className="relative inline-block">
+                  O
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <span className="w-[0.8em] h-[0.8em] rounded-full border-[6px] md:border-[8px] border-primary shadow-[0_0_20px_rgba(0,174,239,0.5)]"></span>
+                  </span>
+                </span>IT
+              </h1>
+            </div>
+            <div className="flex items-center gap-4 mt-2">
+              <span className="text-2xl md:text-4xl font-headline text-white/60 tracking-[0.6em] font-light">BECOME</span>
+              <span className="text-2xl md:text-4xl font-headline text-primary tracking-[0.4em] font-bold glow-text">EPIK</span>
+            </div>
+          </div>
           
-          <div className="flex flex-col items-center space-y-2 mt-8">
-            <div className="flex flex-col items-center space-y-4 mt-8 w-64">
-              <div className="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-primary shadow-[0_0_10px_#82cfff] transition-all duration-500 ease-out" 
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-              <div className="flex items-center space-x-3 bg-surface-container-low px-4 py-1.5 rounded-sm border-b border-primary/30 min-w-[200px] justify-center">
-                <span className="material-symbols-outlined text-[14px] text-tertiary animate-spin" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  change_circle
-                </span>
-                <span className="font-label text-[10px] md:text-xs text-on-surface-variant uppercase tracking-[0.1em]">
+          <div className="mt-12 space-y-2">
+            <div className="h-px w-32 bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto"></div>
+            <h2 className="text-sm md:text-base text-primary/80 font-headline tracking-[0.3em] uppercase">AI Development Conference</h2>
+            <div className="h-px w-32 bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto"></div>
+          </div>
+        </div>
+
+        {/* Progress System */}
+        <div className="w-full max-w-sm space-y-6 mt-8">
+          <div className="relative pt-1 px-4">
+            <div className="flex mb-2 items-center justify-between">
+              <div>
+                <span className="text-[10px] font-label font-bold inline-block py-1 px-2 uppercase rounded-sm text-primary bg-primary/10 border border-primary/20">
                   {status}
                 </span>
               </div>
-              <div className="flex items-center space-x-3 mt-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-secondary-container shadow-[0_0_5px_#00e3fd] animate-pulse"></span>
-                <span className="font-label text-[11px] md:text-sm text-primary uppercase tracking-[0.1em] glow-text">
-                  EPIK AI PROTOCOL {progress === 100 ? 'SYNCHRONIZED' : 'LOADING'}
+              <div className="text-right">
+                <span className="text-xs font-headline font-bold inline-block text-primary">
+                  {progress}%
                 </span>
+              </div>
+            </div>
+            <div className="overflow-hidden h-1.5 mb-4 text-xs flex rounded-full bg-white/5 border border-white/10">
+              <div 
+                style={{ width: `${progress}%` }}
+                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary transition-all duration-500 relative"
+              >
+                <div className="absolute top-0 right-0 h-full w-4 bg-white/30 blur-sm"></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="absolute bottom-10 w-full max-w-md px-8 flex flex-col space-y-1 opacity-40">
-          <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
-          <div className="w-3/4 mx-auto h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-          <div className="flex justify-between w-full px-10 mt-2">
-            <span className="font-label text-[8px] text-outline-variant uppercase tracking-widest">SYS.ON</span>
-            <span className="font-label text-[8px] text-outline-variant uppercase tracking-widest">V.98.2</span>
-            <span className="font-label text-[8px] text-outline-variant uppercase tracking-widest">SEQ.A</span>
-          </div>
+        {/* Slogans */}
+        <div className="mt-16 flex flex-col items-center gap-4 text-center opacity-70 group hover:opacity-100 transition-opacity duration-700">
+          <p className="text-[10px] md:text-sm text-white font-headline tracking-[0.4em] uppercase">Learn AI • Shape Tomorrow</p>
+          <p className="text-[9px] md:text-xs text-primary font-body tracking-[0.2em] font-bold uppercase border-t border-primary/20 pt-4">
+            Unlock The Power Of Artificial Intelligence
+          </p>
+        </div>
+
+        {/* Event Stats Preview */}
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-full max-w-2xl px-12 flex justify-between items-end opacity-40">
+           <div className="flex flex-col">
+              <span className="text-[10px] text-white font-bold tracking-widest">26 APRIL</span>
+              <span className="text-[8px] text-primary tracking-widest uppercase">SYST_DATE</span>
+           </div>
+           <div className="flex flex-col items-center">
+              <span className="material-symbols-outlined text-primary text-xl mb-1">radar</span>
+              <span className="text-[8px] text-white/60 tracking-widest uppercase">ISIMS_AMPHI</span>
+           </div>
+           <div className="flex flex-col items-end">
+              <span className="text-[10px] text-white font-bold tracking-widest">10:00 AM</span>
+              <span className="text-[8px] text-primary tracking-widest uppercase">UPLINK_TIME</span>
+           </div>
         </div>
       </div>
     </div>
   );
 }
+

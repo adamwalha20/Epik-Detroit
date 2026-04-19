@@ -32,7 +32,7 @@ export default function Quiz() {
 
   const question = QUIZ_QUESTIONS[currentQuestionIndex];
 
-  const handleOptionClick = async (trait: string, value: number, optionText: string) => {
+  const handleOptionClick = async (trait: string, value: number, optionText: string, isCorrect?: boolean) => {
     const newScores = { ...scores, [trait]: scores[trait as keyof typeof scores] + value };
     setScores(newScores);
     setTimeLeft(10); // Reset timer
@@ -61,7 +61,7 @@ export default function Quiz() {
     setIsSubmitting(true);
     const aiType = calculateAIType(finalScores);
     const totalScore = Object.values(finalScores).reduce((a: number, b: number) => a + b, 0) as number;
-    const percentage = Math.round((totalScore / (QUIZ_QUESTIONS.length * 3)) * 100);
+    const percentage = Math.round((totalScore / QUIZ_QUESTIONS.length) * 100);
     const stabilityIndex = 75 + Math.floor(Math.random() * 20); // Mocked stability
     
     let trustLevel = 'LOW';
@@ -166,7 +166,7 @@ export default function Quiz() {
 
           {/* Options positioned orbitally - mapping to A, B, C, D */}
           <div className="absolute w-full h-full pointer-events-none hidden md:block">
-             <button onClick={() => handleOptionClick(question.options[0].trait, question.options[0].value, question.options[0].text)} className="pointer-events-auto absolute top-8 left-16 group flex items-center gap-4 transition-transform hover:scale-105 active:scale-95 focus:outline-none">
+             <button onClick={() => handleOptionClick(question.options[0].trait, question.options[0].value, question.options[0].text, question.options[0].isCorrect)} className="pointer-events-auto absolute top-8 left-16 group flex items-center gap-4 transition-transform hover:scale-105 active:scale-95 focus:outline-none">
               <div className="relative w-14 h-14 rounded-full bg-primary-container/20 flex items-center justify-center border border-primary z-10 backdrop-blur-sm box-shadow-[0_0_15px_rgba(0,227,253,0.4)]">
                 <span className="font-headline text-primary font-bold">A</span>
                 <div className="absolute -inset-1 rounded-full border border-primary/40"></div>
@@ -176,7 +176,7 @@ export default function Quiz() {
               </div>
             </button>
 
-            <button onClick={() => handleOptionClick(question.options[1].trait, question.options[1].value, question.options[1].text)} className="pointer-events-auto absolute top-8 right-16 group flex items-center gap-4 flex-row-reverse transition-transform hover:scale-105 active:scale-95 focus:outline-none">
+            <button onClick={() => handleOptionClick(question.options[1].trait, question.options[1].value, question.options[1].text, question.options[1].isCorrect)} className="pointer-events-auto absolute top-8 right-16 group flex items-center gap-4 flex-row-reverse transition-transform hover:scale-105 active:scale-95 focus:outline-none">
               <div className="relative w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center border border-outline-variant/50 group-hover:border-primary/50 transition-colors z-10">
                 <span className="font-headline text-on-surface-variant group-hover:text-primary transition-colors">B</span>
               </div>
@@ -185,7 +185,7 @@ export default function Quiz() {
               </div>
             </button>
 
-            <button onClick={() => handleOptionClick(question.options[2].trait, question.options[2].value, question.options[2].text)} className="pointer-events-auto absolute bottom-12 left-24 group flex items-center gap-4 transition-transform hover:scale-105 active:scale-95 focus:outline-none">
+            <button onClick={() => handleOptionClick(question.options[2].trait, question.options[2].value, question.options[2].text, question.options[2].isCorrect)} className="pointer-events-auto absolute bottom-12 left-24 group flex items-center gap-4 transition-transform hover:scale-105 active:scale-95 focus:outline-none">
               <div className="relative w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center border border-outline-variant/50 group-hover:border-primary/50 transition-colors z-10">
                 <span className="font-headline text-on-surface-variant group-hover:text-primary transition-colors">C</span>
               </div>
@@ -194,7 +194,7 @@ export default function Quiz() {
               </div>
             </button>
 
-            <button onClick={() => handleOptionClick(question.options[3].trait, question.options[3].value, question.options[3].text)} className="pointer-events-auto absolute bottom-12 right-24 group flex items-center gap-4 flex-row-reverse transition-transform hover:scale-105 active:scale-95 focus:outline-none">
+            <button onClick={() => handleOptionClick(question.options[3].trait, question.options[3].value, question.options[3].text, question.options[3].isCorrect)} className="pointer-events-auto absolute bottom-12 right-24 group flex items-center gap-4 flex-row-reverse transition-transform hover:scale-105 active:scale-95 focus:outline-none">
               <div className="relative w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center border border-outline-variant/50 group-hover:border-primary/50 transition-colors z-10">
                 <span className="font-headline text-on-surface-variant group-hover:text-primary transition-colors">D</span>
               </div>
@@ -210,7 +210,7 @@ export default function Quiz() {
           {question.options.map((opt) => (
             <button 
               key={opt.id}
-              onClick={() => handleOptionClick(opt.trait, opt.value, opt.text)}
+              onClick={() => handleOptionClick(opt.trait, opt.value, opt.text, opt.isCorrect)}
               className="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-3 rounded-lg border border-outline-variant/20 flex gap-3 text-left w-full hover:border-primary/50 hover:bg-surface-container-low transition-all active:scale-95"
             >
               <span className="font-headline font-bold text-primary">{opt.id}</span>

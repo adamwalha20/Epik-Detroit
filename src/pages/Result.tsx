@@ -83,27 +83,36 @@ export default function Result() {
   if (!profileData) return <div className="min-h-screen bg-background flex items-center justify-center text-primary font-headline">SYNCING IDENTITY...</div>;
 
   return (
-    <div className="bg-surface text-on-surface font-body antialiased min-h-screen flex flex-col pt-24 pb-32 md:pb-0 overflow-x-hidden relative scan-line-bg selection:bg-primary-container selection:text-on-primary-container">
+    <div className="bg-surface text-on-surface font-body antialiased min-h-screen flex flex-col pt-24 pb-64 md:pb-12 overflow-x-hidden relative scan-line-bg selection:bg-primary-container selection:text-on-primary-container">
       <Navigation />
       
-      <main className="flex-grow flex items-center justify-center p-6 md:p-12 relative z-10">
+      <main className="flex-grow flex items-center justify-center p-6 md:p-12 pb-80 md:pb-12 relative z-10">
         <div id="identity-card" className="w-full max-w-4xl bg-[#131313] rounded-xl border border-primary/20 p-1 relative overflow-hidden ambient-glow shadow-[0_0_50px_rgba(0,174,239,0.1)]">
           {/* Official Header */}
-          <div className="flex justify-between items-center px-8 py-6 border-b border-primary/20 bg-primary/5 relative overflow-hidden">
+          <div className="flex flex-col md:flex-row justify-between items-center px-6 py-10 md:px-10 border-b border-primary/20 bg-primary/5 relative overflow-hidden gap-8 text-center md:text-left">
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-            <div className="flex items-center gap-5 relative z-10">
-              <img src="/club-logo.png" alt="Club Logo" className="h-14 w-auto drop-shadow-[0_0_15px_rgba(0,174,239,0.4)]" />
-              <div className="flex flex-col">
-                <span className="text-[12px] font-headline text-white tracking-[0.4em] font-bold">EPIK LEADERS</span>
-                <span className="text-[8px] font-label text-primary tracking-[0.2em] font-bold opacity-80 uppercase">ISIMS BRANCH | PROTOCOL EVALUATION</span>
+            <div className="absolute inset-0 scan-line opacity-10 pointer-events-none"></div>
+            
+              <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 relative z-10 w-full md:w-auto">
+                <div className="relative group shrink-0">
+                  <div className="absolute -inset-3 bg-primary/20 rounded-lg blur-lg opacity-60 animate-pulse"></div>
+                  <img src="/club-logo.png" alt="Club Logo" className="h-10 md:h-16 w-auto drop-shadow-[0_0_15px_rgba(0,174,239,0.6)] relative z-10" />
+                </div>
+                <div className="flex flex-col items-center md:items-start mt-2 md:mt-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[12px] md:text-lg font-headline text-white tracking-[0.2em] md:tracking-[0.4em] font-bold whitespace-nowrap">EPIK LEADERS</span>
+                    <span className="material-symbols-outlined text-primary text-sm md:text-lg animate-pulse" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+                  </div>
+                  <span className="text-[7px] md:text-[10px] font-label text-primary tracking-[0.1em] md:tracking-[0.2em] font-bold opacity-80 uppercase bg-primary/10 px-2 md:px-3 py-0.5 md:py-1 rounded-sm border border-primary/20 whitespace-nowrap">ISIMS BRANCH | PROTOCOL EVALUATION</span>
+                </div>
               </div>
-            </div>
-            <div className="text-right flex flex-col relative z-10">
-              <div className="flex items-center justify-end gap-2 mb-1">
-                <span className="material-symbols-outlined text-primary text-[14px]">verified</span>
-                <span className="text-[11px] font-headline text-white tracking-[0.3em] font-bold">CERTIFICATE OF PARTICIPATION</span>
+
+            <div className="flex flex-col relative z-10 w-full md:w-auto items-center md:items-end gap-2 border-t md:border-t-0 md:border-l border-primary/20 pt-6 md:pt-0 md:pl-8">
+              <span className="text-xs md:text-sm font-headline text-white tracking-[0.3em] font-bold uppercase">CERTIFICATE OF PARTICIPATION</span>
+              <div className="flex items-center gap-3">
+                <div className="h-[1px] w-8 bg-primary/40 hidden md:block"></div>
+                <span className="text-[10px] font-label text-on-surface-variant tracking-[0.2em] opacity-80 font-bold font-mono">HASH: 26042026_DETROIT</span>
               </div>
-              <span className="text-[9px] font-label text-on-surface-variant tracking-[0.1em] opacity-60 font-medium">SESSION_HASH: {Math.random().toString(36).substring(7).toUpperCase()}A82</span>
             </div>
           </div>
 
@@ -115,7 +124,7 @@ export default function Result() {
                 <div className="absolute inset-0 rounded-full border border-primary/20"></div>
                 <div className="absolute inset-0 rounded-full border-2 border-primary border-t-transparent border-l-transparent transform rotate-45 glow-primary animate-pulse"></div>
                 <div className="absolute inset-4 rounded-full bg-primary/5 glow-primary"></div>
-                <label htmlFor="avatar-upload" className="absolute inset-6 rounded-full overflow-hidden border border-primary/30 flex items-center justify-center bg-[#1a1a1a] cursor-pointer group hover:border-primary transition-all">
+                <label htmlFor="result-avatar-upload" className="absolute inset-6 rounded-full overflow-hidden border border-primary/30 flex items-center justify-center bg-[#1a1a1a] cursor-pointer group hover:border-primary transition-all">
                   {avatarUrl ? (
                     <img src={avatarUrl} alt="Identity" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   ) : (
@@ -135,23 +144,23 @@ export default function Result() {
               <div className="text-center font-headline uppercase tracking-[0.05em] flex flex-col gap-2 w-full">
                 <div className="text-xs text-primary tracking-[0.3em] font-bold mb-1">IDENT_VERIFIED</div>
                 <h1 className="text-3xl text-white font-bold drop-shadow-[0_0_10px_rgba(0,174,239,0.3)]">{profileData.name}</h1>
-                <p className="text-primary/70 text-sm border-b border-primary/20 pb-2 mb-2 font-light tracking-widest">{profileData.ai_type}</p>
-                <div className="mt-4 flex flex-col gap-1 items-center">
-                  <div className="w-full h-1 bg-primary/20 relative overflow-hidden rounded-full">
-                    <div className="absolute inset-0 bg-primary animate-[shimmer_2s_infinite]" style={{ width: '40%' }}></div>
+                <p className="text-primary text-[12px] border-b border-primary/20 pb-2 mb-4 font-bold tracking-[0.4em] uppercase opacity-90">{profileData.ai_type}</p>
+                <div className="mt-6 flex flex-col gap-2 items-center px-6 w-full max-w-[240px]">
+                  <div className="w-full h-[2px] bg-primary/20 relative overflow-hidden rounded-full shadow-[0_0_10px_rgba(0,174,239,0.1)]">
+                    <div className="absolute inset-0 bg-primary animate-[shimmer_2.5s_infinite]" style={{ width: '75%' }}></div>
                   </div>
-                  <span className="text-[9px] text-on-surface-variant mt-2 tracking-[0.4em] opacity-60">ID-8849-SYSTEM-CORE</span>
+                  <span className="text-[10px] text-on-surface-variant mt-3 tracking-[0.5em] opacity-40 font-bold">DEVICE_ID: CORE-8849</span>
                 </div>
               </div>
             </div>
             
-            <div className="flex-grow flex flex-col justify-between gap-8 z-10 relative">
-              <div className="grid grid-cols-2 gap-6">
+            <div className="flex-grow flex flex-col justify-center gap-10 z-10 relative">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 px-4 sm:px-0">
                 <div className="bg-[#1a1a1a] p-6 border border-primary/20 relative overflow-hidden group shadow-inner">
                   <div className="absolute top-0 left-0 w-full h-[2px] bg-primary group-hover:shadow-[0_0_15px_rgba(0,174,239,1)] transition-all"></div>
                   <span className="font-label text-[10px] text-primary uppercase tracking-[0.2em] block mb-4 font-bold">TRUST INDEX / SUCCESS</span>
                   <div className="flex items-end gap-2">
-                    <span className="font-headline text-5xl text-white font-light drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">{profileData.score}</span>
+                    <span className="font-headline text-5xl text-white font-light drop-shadow-[0_0_15px_rgba(255,183,125,0.2)]">{profileData.score}</span>
                     <span className="text-primary text-lg pb-1 font-bold">%</span>
                   </div>
                   <div className="absolute bottom-4 right-6 w-12 h-[1px] bg-primary/40 group-hover:w-20 transition-all"></div>
@@ -167,26 +176,59 @@ export default function Result() {
                 </div>
               </div>
               
-              <div className="flex flex-col gap-4 mt-4">
+              <div className="flex flex-col gap-4 mt-2">
                 <div className="flex items-center gap-4">
-                  <h3 className="font-label text-[10px] text-primary uppercase tracking-[0.2em] font-bold">PROTOCOL_STATUS</h3>
+                  <h3 className="font-label text-[9px] text-primary uppercase tracking-[0.2em] font-bold">PROTOCOL_STATUS</h3>
                   <div className="h-[1px] flex-grow bg-primary/20"></div>
                 </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="bg-primary/10 border border-primary/30 text-primary font-label text-[10px] uppercase px-4 py-2 rounded-sm tracking-widest flex items-center gap-2 shadow-[0_0_10px_rgba(0,174,239,0.1)]">
-                    <span className="material-symbols-outlined text-[14px]">verified_user</span>
+                <div className="flex flex-wrap gap-2">
+                  <span className="bg-primary/10 border border-primary/30 text-primary font-label text-[9px] uppercase px-3 py-1.5 rounded-sm tracking-widest flex items-center gap-2 shadow-[0_0_10px_rgba(0,174,239,0.1)]">
+                    <span className="material-symbols-outlined text-[12px]">verified_user</span>
                     {profileData.trust_level}_CLEARANCE
                   </span>
-                  <span className="bg-white/5 border border-white/10 text-white/70 font-label text-[10px] uppercase px-4 py-2 rounded-sm tracking-widest flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[14px]">terminal</span>
+                  <span className="bg-white/5 border border-white/10 text-white/70 font-label text-[9px] uppercase px-3 py-1.5 rounded-sm tracking-widest flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[12px]">terminal</span>
                     SENTIENT_LENS_PASS
                   </span>
                 </div>
               </div>
+
+              {/* Mission Timeline Section */}
+              <div className="mt-4 flex flex-col gap-4 mb-8 sm:mb-0">
+                <div className="flex items-center gap-4">
+                  <h3 className="font-label text-[9px] text-primary uppercase tracking-[0.2em] font-bold">MISSION_CHECKPOINTS</h3>
+                  <div className="h-[1px] flex-grow bg-primary/20"></div>
+                </div>
+                <div className="grid grid-cols-1 gap-4">
+                  {[
+                    { time: '10:00', title: 'INITIAL UPLINK', speaker: 'EPIK SUPPORT' },
+                    { time: '11:00', title: 'GEN-AI PROTOCOL', speaker: 'ADAM WALHA' },
+                    { time: '14:00', title: 'APPLICATIVE WORKSHOP', speaker: 'SYSTEMS LEAD' }
+                  ].map((item, idx) => (
+                    <div key={idx} className="bg-[#1a1a1a] border border-primary/10 p-4 flex items-center justify-between group hover:border-primary/30 transition-all rounded-sm shadow-md">
+                      <div className="flex items-center gap-5">
+                        <div className="flex flex-col items-center">
+                          <span className="text-xs font-headline text-white">{item.time}</span>
+                          <div className="w-[1px] h-4 bg-primary/20 mt-1"></div>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-[11px] font-bold text-white tracking-widest uppercase mb-1">{item.title}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[9px] text-primary font-label uppercase opacity-60">Identity:</span>
+                            <span className="text-[9px] text-white/90 font-bold uppercase tracking-tight">{item.speaker}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <span className="material-symbols-outlined text-primary/30 text-[20px] group-hover:text-primary transition-colors">check_circle</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
               
               {/* Footer Actions / Verification */}
-              <div className="mt-8 pt-6 border-t border-primary/20 flex flex-col sm:flex-row justify-between items-center no-print gap-6">
-                <div className="flex flex-col items-center sm:items-start">
+              <div className="mt-8 pt-10 border-t border-primary/20 flex flex-col sm:flex-row justify-between items-center no-print gap-6">
+                <div className="flex flex-col items-center sm:items-start opacity-70">
                   <span className="text-[9px] font-label text-primary tracking-[0.2em] font-bold">AUTHENTICITY_VERIFIED</span>
                   <span className="text-[8px] font-label text-on-surface-variant tracking-[0.1em] opacity-40">ENCRYPTION: SH-256 | DETROIT_CORE</span>
                 </div>
@@ -195,14 +237,14 @@ export default function Result() {
                   <div className="relative w-full sm:w-auto">
                     <input 
                       type="file" 
-                      id="avatar-upload" 
+                      id="result-avatar-upload" 
                       accept="image/*" 
                       onChange={handleFileUpload} 
                       className="hidden" 
                     />
                     <label 
-                      htmlFor="avatar-upload"
-                      className="relative group bg-transparent border border-primary/50 text-white font-label text-[10px] uppercase px-6 py-2.5 tracking-widest hover:bg-primary/10 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 border-dashed w-full sm:w-auto"
+                      htmlFor="result-avatar-upload"
+                      className="relative group bg-transparent border border-primary/40 text-white font-label text-[10px] uppercase px-6 py-3 tracking-widest hover:bg-primary/10 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 border-dashed w-full sm:w-auto"
                     >
                       <span className="material-symbols-outlined text-[16px] text-primary">add_a_photo</span>
                       {avatarUrl ? 'REFRESH PHOTO' : 'IMPORT IDENTITY'}
@@ -213,9 +255,9 @@ export default function Result() {
                     onClick={() => {
                       window.print();
                     }}
-                    className="relative group bg-primary border border-primary text-[#131313] font-label text-[10px] uppercase px-8 py-2.5 tracking-widest hover:bg-white hover:border-white transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-[0_0_20px_rgba(0,174,239,0.3)] w-full sm:w-auto"
+                    className="relative group bg-primary border border-primary text-[#131313] font-label text-[11px] uppercase px-8 py-3 tracking-widest hover:bg-white hover:border-white transition-all duration-300 flex items-center justify-center gap-3 font-bold shadow-[0_0_25px_rgba(0,174,239,0.4)] w-full sm:w-auto active:scale-95"
                   >
-                    <span className="material-symbols-outlined text-[16px]">file_download</span>
+                    <span className="material-symbols-outlined text-[18px]">file_download</span>
                     DOWNLOAD CERTIFICATE
                   </button>
                 </div>
@@ -233,44 +275,50 @@ export default function Result() {
 
       <style>{`
         @page {
-          size: auto;
-          margin: 0mm;
+          size: landscape;
+          margin: 0;
         }
         @media print {
-          body { 
-            background: #0a0a0a !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
+          html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            height: 100vh !important;
+            width: 100vw !important;
+            overflow: hidden !important;
+            background: #131313 !important;
           }
           .no-print { display: none !important; }
           #identity-card { 
-            position: fixed !important;
+            position: absolute !important;
             top: 0 !important;
             left: 0 !important;
             width: 100vw !important;
             height: 100vh !important;
             max-width: none !important;
             border: none !important;
+            border-radius: 0 !important;
             background: #131313 !important;
             margin: 0 !important;
-            padding: 20px !important;
+            padding: 40px !important;
             display: flex !important;
             flex-direction: column !important;
             justify-content: center !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+            box-shadow: none !important;
           }
-          /* Force visibility of all elements */
+          /* Ensure all backgrounds and colors print precisely */
           #identity-card * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
-            text-shadow: none !important;
           }
-          .ambient-glow { display: none !important; }
-          /* Ensure backgrounds print */
           .bg-primary\/5 { background-color: rgba(0, 174, 239, 0.05) !important; }
           .bg-\[\#1a1a1a\] { background-color: #1a1a1a !important; }
           .bg-primary { background-color: #00aeef !important; }
+          .border-primary\/20 { border-color: rgba(0, 174, 239, 0.2) !important; }
+          .text-primary { color: #00aeef !important; }
+          .text-white { color: #ffffff !important; }
+          .ambient-glow { box-shadow: none !important; }
         }
         @keyframes shimmer {
           0% { transform: translateX(-100%); }
@@ -278,5 +326,6 @@ export default function Result() {
         }
       `}</style>
     </div>
+
   );
 }
