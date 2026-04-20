@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase, isMock } from '../lib/supabase';
 import { useLanguage } from '../context/LanguageContext';
 import LanguageToggle from '../components/LanguageToggle';

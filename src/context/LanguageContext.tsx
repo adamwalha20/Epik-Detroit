@@ -25,8 +25,9 @@ const translations = {
     'login_prompt': 'ALREADY ENROLLED? LOGIN',
     'register_prompt': 'EXEC: Create Identity',
     'initializing': 'INITIALIZING...',
-    'securing_connection': 'CONNECTION_SECURE',
-    'awaiting_input': 'AWAITING_INPUT...',
+    'securing_connection': 'SECURING CONNECTION...',
+    'awaiting_input': 'AWAITING INPUT...',
+    'language_selector_or': 'OR',
     
     // Quiz
     'evaluation_protocol': 'AI EVALUATION PROTOCOL',
@@ -156,8 +157,9 @@ const translations = {
     'login_prompt': 'DÉJÀ ENRÔLÉ ? CONNEXION',
     'register_prompt': 'EXEC: Créer l\'Identité',
     'initializing': 'INITIALISATION...',
-    'securing_connection': 'CONNEXION_SÉCURISÉE',
+    'securing_connection': 'SÉCURISATION DE LA CONNEXION...',
     'awaiting_input': 'EN ATTENTE D\'ENTRÉE...',
+    'language_selector_or': 'OU',
     
     // Quiz
     'evaluation_protocol': 'PROTOCOLE D\'ÉVALUATION IA',
