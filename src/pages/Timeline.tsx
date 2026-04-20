@@ -39,11 +39,6 @@ export default function Timeline() {
     <div className="bg-[#131313] text-on-surface font-body antialiased min-h-screen flex flex-col pt-24 pb-72 md:pb-48 overflow-x-hidden relative scan-line-bg">
       <Navigation />
       
-      {/* Top Header Controls */}
-      <div className="fixed top-6 right-6 z-[60] flex items-center gap-4">
-        <LanguageToggle />
-      </div>
-
       {/* Dynamic Background Elements */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]"></div>
