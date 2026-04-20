@@ -11,7 +11,7 @@ export default function Quiz() {
   const [scores, setScores] = useState({ logic: 0, creativity: 0, risk: 0, empathy: 0 });
   const [easterEggClicks, setEasterEggClicks] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(30);
 
   useEffect(() => {
     if (isSubmitting) return;
@@ -35,7 +35,7 @@ export default function Quiz() {
   const handleOptionClick = async (trait: string, value: number, optionText: string, isCorrect?: boolean) => {
     const newScores = { ...scores, [trait]: scores[trait as keyof typeof scores] + value };
     setScores(newScores);
-    setTimeLeft(10); // Reset timer
+    setTimeLeft(30); // Reset timer
     
     // Save decision history
     if (!isMock) {
@@ -132,7 +132,7 @@ export default function Quiz() {
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeDasharray="301.59"
-                strokeDashoffset={301.59 * (1 - timeLeft / 10)}
+                strokeDashoffset={301.59 * (1 - timeLeft / 30)}
                 className="text-primary transition-all duration-100 ease-linear"
                 style={{ filter: 'drop-shadow(0 0 4px var(--color-primary))' }}
               />
