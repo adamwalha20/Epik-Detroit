@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import { supabase, isMock } from '../lib/supabase';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function HUD() {
   const navigate = useNavigate();
+  const { t, language } = useLanguage();
   const [profileData, setProfileData] = useState<any>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -124,15 +126,15 @@ export default function HUD() {
                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full border-2 border-[#131313] animate-pulse shadow-[0_0_8px_rgba(0,174,239,0.8)]"></div>
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] font-label text-primary tracking-[0.2em] uppercase font-bold">Subject_Identified</span>
+                <span className="text-[10px] font-label text-primary tracking-[0.2em] uppercase font-bold">{t('subject_identified')}</span>
                 <h2 className="text-xl font-headline text-white tracking-widest mt-1 uppercase truncate max-w-[180px]">
-                  {profileData?.name || 'SYNCING...'}
+                  {profileData?.name || t('syncing')}
                 </h2>
                 <div className="flex items-center gap-2 mt-2">
                   <span className="text-[9px] font-label text-on-surface-variant bg-white/5 border border-white/10 px-2 py-0.5 rounded tracking-widest uppercase">
-                    {profileData?.ai_type || 'LOADING'}
+                    {(profileData?.ai_type as string) ? (language === 'fr' ? profileData.ai_type : profileData.ai_type) : t('loading')}
                   </span>
-                  <span className="text-[8px] font-label text-primary animate-pulse tracking-[0.1em]">ENCRYPTED_LINK_ACTIVE</span>
+                  <span className="text-[8px] font-label text-primary animate-pulse tracking-[0.1em]">{t('encrypted_active')}</span>
                 </div>
               </div>
             </div>
@@ -146,27 +148,27 @@ export default function HUD() {
                 <span className="relative w-2 h-2 bg-primary rounded-full"></span>
               </div>
               <h2 className="font-label text-sm uppercase tracking-[0.05em] text-on-surface flex items-center gap-2">
-                MISSION BRIEFING
+                {t('mission_briefing')}
                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(0,174,239,0.6)]"></span>
               </h2>
             </div>
             
             <div className="space-y-4 font-headline">
               <div className="flex justify-between items-center border-b border-outline-variant/20 pb-3">
-                <span className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Target Date</span>
-                <span className="text-sm text-white font-bold tracking-[0.2em]">26 APRIL</span>
+                <span className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">{t('target_date')}</span>
+                <span className="text-sm text-white font-bold tracking-[0.2em]">26 {language === 'fr' ? 'AVRIL' : 'APRIL'}</span>
               </div>
               <div className="flex justify-between items-center border-b border-outline-variant/20 pb-3">
-                <span className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Deployment</span>
+                <span className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">{t('deployment')}</span>
                 <span className="text-sm text-primary font-bold tracking-[0.1em]">10:00 AM</span>
               </div>
               <div className="flex justify-between items-center border-b border-outline-variant/20 pb-3">
-                <span className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Sector Node</span>
+                <span className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">{t('sector_node')}</span>
                 <span className="text-[11px] text-on-surface font-bold uppercase tracking-wider">ISIMS AMPHI</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Activation Fee</span>
-                <span className="text-sm text-secondary-container font-bold">15 DT</span>
+                <span className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">{t('activation_fee')}</span>
+                <span className="text-sm text-secondary-container font-bold">15 {t('dt')}</span>
               </div>
             </div>
           </div>
@@ -175,7 +177,7 @@ export default function HUD() {
              <div className="absolute top-[-50px] right-[-50px] w-32 h-32 bg-primary/5 rounded-full blur-3xl"></div>
              <h3 className="font-label text-xs text-primary uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
                <span className="material-symbols-outlined text-sm">assignment</span>
-               Mission Manifest
+               {t('mission_manifest')}
              </h3>
              
              <div className="space-y-6">
@@ -184,10 +186,10 @@ export default function HUD() {
                       <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
                    </div>
                    <div className="flex flex-col">
-                     <h4 className="text-sm font-headline text-white tracking-widest opacity-90 uppercase leading-none">GenAI Protocol</h4>
-                     <span className="text-[8px] text-primary font-label uppercase tracking-widest mt-1">Speaker: Adam Walha</span>
+                     <h4 className="text-sm font-headline text-white tracking-widest opacity-90 uppercase leading-none">{t('genai_title')}</h4>
+                     <span className="text-[8px] text-primary font-label uppercase tracking-widest mt-1">{language === 'fr' ? 'Conférencier' : 'Speaker'}: Adam Walha</span>
                    </div>
-                   <p className="text-[10px] text-on-surface-variant mt-1 leading-relaxed">CORE_LEARNING: Large Language Models, Generative Architectures & Neural Synergy.</p>
+                   <p className="text-[10px] text-on-surface-variant mt-1 leading-relaxed">{t('genai_desc')}</p>
                 </div>
 
                 <div className="relative pl-6 border-l-2 border-primary/30">
@@ -195,23 +197,23 @@ export default function HUD() {
                       <div className="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
                    </div>
                    <div className="flex flex-col">
-                     <h4 className="text-sm font-headline text-white tracking-widest opacity-90 uppercase leading-none">Applicative Workshop</h4>
-                     <span className="text-[8px] text-primary font-label uppercase tracking-widest mt-1">Speaker: Systems Lead</span>
+                     <h4 className="text-sm font-headline text-white tracking-widest opacity-90 uppercase leading-none">{t('workshop_title')}</h4>
+                     <span className="text-[8px] text-primary font-label uppercase tracking-widest mt-1">{language === 'fr' ? 'Conférencier' : 'Speaker'}: {language === 'fr' ? 'Lead Systèmes' : 'Systems Lead'}</span>
                    </div>
-                   <p className="text-[10px] text-on-surface-variant mt-1 leading-relaxed">PRACTICAL_INTEGRATION: Building real-world AI entities & interface deployment.</p>
+                   <p className="text-[10px] text-on-surface-variant mt-1 leading-relaxed">{t('workshop_desc')}</p>
                 </div>
 
                 <div className="mt-8 pt-4 border-t border-outline-variant/10 flex justify-between items-center bg-primary/5 -mx-6 px-6 py-4">
                   <div className="flex flex-col gap-1">
                     <span className="text-[10px] text-primary font-bold tracking-widest">RESOURCE_SYNC</span>
                     <div className="flex items-center gap-2">
-                       <span className="text-[9px] text-on-surface-variant tracking-widest uppercase">Buffet Included</span>
+                       <span className="text-[9px] text-on-surface-variant tracking-widest uppercase">{t('buffet_included')}</span>
                        <span className="text-[8px] text-white/40 font-mono">:: 12:30</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-secondary-container animate-pulse">verified</span>
-                    <span className="text-[10px] text-white font-bold tracking-widest">CERTIFIED</span>
+                    <span className="text-[10px] text-white font-bold tracking-widest">{t('certified')}</span>
                   </div>
                 </div>
              </div>
@@ -225,24 +227,24 @@ export default function HUD() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 h-full">
             <div className="bg-surface-container-low p-6 rounded-xl border border-outline-variant/15 flex flex-col relative min-h-[220px]">
               <div className="flex justify-between items-start mb-auto">
-                <h3 className="font-label text-xs text-on-surface-variant uppercase tracking-[0.2em]">Deployment Countdown</h3>
+                <h3 className="font-label text-xs text-on-surface-variant uppercase tracking-[0.2em]">{t('countdown')}</h3>
                 <span className="material-symbols-outlined text-primary/50 text-sm">schedule</span>
               </div>
               <div className="flex flex-col items-center justify-center h-full gap-4">
                  <div className="flex gap-4">
                     <div className="text-center">
                        <span className="text-4xl text-white font-headline font-bold">06</span>
-                       <span className="block text-[8px] text-primary tracking-widest uppercase mt-1">Days</span>
+                       <span className="block text-[8px] text-primary tracking-widest uppercase mt-1">{t('days')}</span>
                     </div>
                     <span className="text-4xl text-primary/40 font-headline font-bold mt-[-4px]">:</span>
                     <div className="text-center">
                        <span className="text-4xl text-white font-headline font-bold">14</span>
-                       <span className="block text-[8px] text-primary tracking-widest uppercase mt-1">Hours</span>
+                       <span className="block text-[8px] text-primary tracking-widest uppercase mt-1">{t('hours')}</span>
                     </div>
                     <span className="text-4xl text-primary/40 font-headline font-bold mt-[-4px]">:</span>
                     <div className="text-center">
                        <span className="text-4xl text-white font-headline font-bold">22</span>
-                       <span className="block text-[8px] text-primary tracking-widest uppercase mt-1">Mins</span>
+                       <span className="block text-[8px] text-primary tracking-widest uppercase mt-1">{t('mins')}</span>
                     </div>
                  </div>
                  <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mt-4">
@@ -255,15 +257,15 @@ export default function HUD() {
             <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 flex flex-col relative h-[220px]">
               <div className="hidden sm:block absolute top-1/2 -left-6 w-6 h-[1px]" style={{background: 'linear-gradient(90deg, #82cfff, transparent)'}}></div>
               <div className="flex justify-between items-start mb-auto">
-                <h3 className="font-label text-xs text-on-surface-variant uppercase tracking-[0.2em]">Mission Node</h3>
+                <h3 className="font-label text-xs text-on-surface-variant uppercase tracking-[0.2em]">{t('mission_node')}</h3>
                 <span className="material-symbols-outlined text-secondary-container/50 text-sm">location_on</span>
               </div>
               <div className="flex flex-col h-full justify-center">
                 <span className="font-headline text-2xl text-white tracking-[0.1em] font-bold">ISIMS TUNISIA</span>
                 <p className="text-[10px] text-on-surface-variant mt-2 tracking-[0.2em] leading-relaxed">SECTOR_ID: ISIMS_AMPHI_G1<br/>COORDS: 36.8065° N, 10.1815° E</p>
                 <div className="mt-6 flex items-center gap-3">
-                   <button className="h-8 px-4 bg-primary/20 hover:bg-primary/30 text-primary text-[10px] font-bold tracking-widest border border-primary/30 transition-all rounded-sm uppercase">Scan Map</button>
-                   <span className="text-[10px] text-primary/40 animate-pulse font-mono font-bold">AUTHORIZED</span>
+                   <button className="h-8 px-4 bg-primary/20 hover:bg-primary/30 text-primary text-[10px] font-bold tracking-widest border border-primary/30 transition-all rounded-sm uppercase">{t('scan_map')}</button>
+                   <span className="text-[10px] text-primary/40 animate-pulse font-mono font-bold">{t('authorized')}</span>
                 </div>
               </div>
             </div>
@@ -273,23 +275,23 @@ export default function HUD() {
               <div className="flex justify-between items-center mb-6">
                 <h3 className="font-label text-xs text-primary uppercase tracking-[0.2em] flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
-                  MISSION BROADCAST
+                  {t('mission_broadcast')}
                 </h3>
-                <span className="text-[9px] text-on-surface-variant uppercase tracking-widest font-bold">LIVE_STATUS: NOMINAL</span>
+                <span className="text-[9px] text-on-surface-variant uppercase tracking-widest font-bold">{t('live_status')}: {t('nominal')}</span>
               </div>
               <div className="space-y-4">
                 <div className="flex gap-4 items-start group p-4 bg-white/5 border border-white/5 rounded-lg">
                   <div className="mt-1"><span className="material-symbols-outlined text-primary text-lg">broadcast_on_home</span></div>
                   <div className="flex-grow">
-                    <p className="font-body text-sm text-on-surface group-hover:text-primary transition-colors leading-relaxed tracking-wide">"All systems calibrated for 26th April. Prepare for GenAI protocol initialization at ISIMS."</p>
-                    <span className="font-label text-[10px] text-on-surface-variant uppercase tracking-[0.3em] font-bold mt-3 block">SYSTEM_LOG :: ALPHA_1</span>
+                    <p className="font-body text-sm text-on-surface group-hover:text-primary transition-colors leading-relaxed tracking-wide">{t('broadcast_msg')}</p>
+                    <span className="font-label text-[10px] text-on-surface-variant uppercase tracking-[0.3em] font-bold mt-3 block">{t('broadcast_log')}</span>
                   </div>
                 </div>
                 <div className="flex gap-4 items-start group">
                   <div className="mt-1"><span className="material-symbols-outlined text-outline-variant text-sm group-hover:text-tertiary transition-colors">warning</span></div>
                   <div className="flex-grow">
-                    <p className="font-body text-sm text-on-surface-variant line-clamp-2">"Minor fluctuation in sector 7 power routing. Compensating automatically."</p>
-                    <span className="font-label text-[10px] text-outline-variant uppercase tracking-widest mt-2 block">ID: 102-X • 15m ago</span>
+                    <p className="font-body text-sm text-on-surface-variant line-clamp-2">{t('broadcast_minor')}</p>
+                    <span className="font-label text-[10px] text-outline-variant uppercase tracking-widest mt-2 block">ID: 102-X • 15m {t('ago')}</span>
                   </div>
                 </div>
               </div>
@@ -304,7 +306,7 @@ export default function HUD() {
           className="w-full bg-surface-container-low/40 p-4 rounded-xl border border-red-500/20 hover:bg-red-500/5 hover:border-red-500/40 transition-all group flex items-center justify-center gap-3"
         >
           <span className="material-symbols-outlined text-red-500/60 group-hover:text-red-500 transition-colors">power_settings_new</span>
-          <span className="font-label text-xs text-on-surface-variant group-hover:text-red-500 tracking-[0.3em] font-bold uppercase transition-colors italic">Terminate Authorized Session</span>
+          <span className="font-label text-xs text-on-surface-variant group-hover:text-red-500 tracking-[0.3em] font-bold uppercase transition-colors italic">{t('terminate_session')}</span>
         </button>
       </div>
     </div>

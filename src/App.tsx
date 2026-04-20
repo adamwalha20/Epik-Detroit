@@ -10,9 +10,12 @@ import Timeline from './pages/Timeline';
 import HUD from './pages/HUD';
 import Feedback from './pages/Feedback';
 
+import { LanguageProvider } from './context/LanguageContext';
+
 export default function App() {
   return (
-    <Router>
+    <LanguageProvider>
+      <Router>
       <Routes>
         <Route path="/" element={<Splash />} />
         <Route path="/login" element={<Login />} />
@@ -26,5 +29,6 @@ export default function App() {
         <Route path="/feedback" element={<Feedback />} />
       </Routes>
     </Router>
+    </LanguageProvider>
   );
 }

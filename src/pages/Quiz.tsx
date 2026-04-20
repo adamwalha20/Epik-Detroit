@@ -4,6 +4,7 @@ import Navigation from '../components/Navigation';
 import { supabase, isMock } from '../lib/supabase';
 import { QUIZ_QUESTIONS, calculateAIType } from '../lib/quizData';
 import { cn } from '../lib/utils';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Quiz() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ export default function Quiz() {
   const [easterEggClicks, setEasterEggClicks] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     if (isSubmitting) return;
@@ -19,7 +21,7 @@ export default function Quiz() {
     if (timeLeft === 0) {
       // Auto-advance if time runs out
       const defaultTrait = question.options[0].trait;
-      handleOptionClick(defaultTrait, 0, "TIME_EXPIRED");
+      handleOptionClick(defaultTrait, 0, t('time_expired'));
       return;
     }
 
@@ -30,7 +32,8 @@ export default function Quiz() {
     return () => clearInterval(timer);
   }, [timeLeft, isSubmitting]);
 
-  const question = QUIZ_QUESTIONS[currentQuestionIndex];
+  const questions = QUIZ_QUESTIONS[language] || QUIZ_QUESTIONS.en;
+  const question = questions[currentQuestionIndex];
 
   const handleOptionClick = async (trait: string, value: number, optionText: string, isCorrect?: boolean) => {
     const newScores = { ...scores, [trait]: scores[trait as keyof typeof scores] + value };
@@ -50,7 +53,7 @@ export default function Quiz() {
       }
     }
 
-    if (currentQuestionIndex < QUIZ_QUESTIONS.length - 1) {
+    if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
       await finalizeQuiz(newScores);
@@ -59,9 +62,9 @@ export default function Quiz() {
 
   const finalizeQuiz = async (finalScores: typeof scores) => {
     setIsSubmitting(true);
-    const aiType = calculateAIType(finalScores);
+    const aiType = calculateAIType(finalScores, language);
     const totalScore = Object.values(finalScores).reduce((a: number, b: number) => a + b, 0) as number;
-    const percentage = Math.round((totalScore / QUIZ_QUESTIONS.length) * 100);
+    const percentage = Math.round((totalScore / questions.length) * 100);
     const stabilityIndex = 75 + Math.floor(Math.random() * 20); // Mocked stability
     
     let trustLevel = 'LOW';
@@ -146,7 +149,7 @@ export default function Quiz() {
               psychology
             </span>
             <h1 className="font-headline text-lg text-center text-on-surface uppercase tracking-wider mb-2 relative z-10">
-              AI EVALUATION PROTOCOL
+              {t('evaluation_protocol')}
             </h1>
             <p className="font-body text-sm text-center text-on-surface-variant relative z-10">
               {question.text}
@@ -155,7 +158,7 @@ export default function Quiz() {
             <div className="absolute bottom-6 flex items-center gap-2 bg-surface-container-highest px-4 py-1.5 rounded-full border border-outline-variant/30 z-10">
               <div className="w-1.5 h-1.5 rounded-full bg-secondary-container"></div>
               <span className="font-headline text-[10px] text-secondary tracking-widest uppercase">
-                {currentQuestionIndex + 1} / {QUIZ_QUESTIONS.length} INTEGRATING | {Math.ceil(timeLeft)}s
+                {currentQuestionIndex + 1} / {questions.length} {t('integrating')} | {Math.ceil(timeLeft)}{t('time_remaining')}
               </span>
             </div>
           </div>

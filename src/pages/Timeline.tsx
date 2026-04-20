@@ -2,6 +2,8 @@ import Navigation from '../components/Navigation';
 import { TIMELINE_EVENTS } from '../lib/timelineData';
 import { motion } from 'framer-motion';
 import { Clock, User, Zap, Target, Coffee, Radio } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import LanguageToggle from '../components/LanguageToggle';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -30,10 +32,18 @@ const iconMap = {
 };
 
 export default function Timeline() {
+  const { language, t } = useLanguage();
+  const events = TIMELINE_EVENTS[language];
+
   return (
     <div className="bg-[#131313] text-on-surface font-body antialiased min-h-screen flex flex-col pt-24 pb-72 md:pb-48 overflow-x-hidden relative scan-line-bg">
       <Navigation />
       
+      {/* Top Header Controls */}
+      <div className="fixed top-6 right-6 z-[60] flex items-center gap-4">
+        <LanguageToggle />
+      </div>
+
       {/* Dynamic Background Elements */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]"></div>
@@ -50,14 +60,14 @@ export default function Timeline() {
         >
           <div className="flex items-center gap-3 mb-4">
             <div className="h-[2px] w-12 bg-primary/60"></div>
-            <span className="text-primary font-label text-xs tracking-[0.3em] uppercase">Tactical Feed</span>
+            <span className="text-primary font-label text-xs tracking-[0.3em] uppercase">{t('tactical_feed')}</span>
           </div>
           <h2 className="font-headline text-4xl md:text-6xl text-white tracking-tight uppercase mb-4 text-glow">
-            MISSION<br/><span className="text-primary/90">TIMELINE</span>
+            {t('mission')}<br/><span className="text-primary/90">{t('timeline')}</span>
           </h2>
           <p className="font-body text-on-surface-variant text-sm md:text-base max-w-lg border-l border-primary/30 pl-4 opacity-70 uppercase tracking-widest leading-relaxed">
-            CHRONOLOGICAL DEPLOYMENT SEQUENCE FOR APRIL 26. 
-            <span className="block mt-1 text-[10px] text-primary/50">SYSTEM_TIME: 14:12:45 // SYNC_STATUS: OPTIMAL</span>
+            {t('sequence_desc')}
+            <span className="block mt-1 text-[10px] text-primary/50">{t('system_time')}: 14:12:45 // {t('sync_status')}: {t('optimal')}</span>
           </p>
         </motion.div>
 
@@ -78,8 +88,8 @@ export default function Timeline() {
             />
           </div>
 
-          {TIMELINE_EVENTS.map((event, index) => {
-            const Icon = iconMap[event.type] || Clock;
+          {events.map((event, index) => {
+            const Icon = (iconMap as any)[event.type] || Clock;
             
             return (
               <motion.div 
@@ -173,8 +183,8 @@ export default function Timeline() {
                </div>
              </div>
              <div className="flex flex-col pl-8 md:pl-12">
-               <span className="font-label text-[10px] tracking-[0.4em] uppercase text-primary/60 leading-none">END_OF_SEQUENCE</span>
-               <span className="text-[8px] text-primary/30 font-label tracking-widest mt-1.5 uppercase">Transmission Terminated // Log Closed</span>
+               <span className="font-label text-[10px] tracking-[0.4em] uppercase text-primary/60 leading-none">{t('end_of_sequence')}</span>
+               <span className="text-[8px] text-primary/30 font-label tracking-widest mt-1.5 uppercase">{t('trans_terminated')}</span>
              </div>
           </motion.div>
         </motion.div>
@@ -182,10 +192,10 @@ export default function Timeline() {
         {/* System Diagnostics footer - Moved up slightly with margin */}
         <div className="mt-20 mb-12 grid grid-cols-2 md:grid-cols-4 gap-4 z-10 opacity-40">
           {[
-            { label: 'Stream Status', value: 'Operational' },
-            { label: 'Temporal Sync', value: '0.004ms' },
-            { label: 'Event Node', value: 'Detroit_2604' },
-            { label: 'Sequence ID', value: 'EPIK_BT_02' }
+            { label: t('stream_status'), value: t('operational') },
+            { label: t('temporal_sync'), value: '0.004ms' },
+            { label: t('event_node'), value: 'Detroit_2604' },
+            { label: t('sequence_id'), value: 'EPIK_BT_02' }
           ].map((stat, i) => (
             <div key={i} className="border-l border-primary/20 pl-3 py-1">
               <div className="text-[8px] font-label uppercase tracking-widest text-primary/50 mb-0.5">{stat.label}</div>
@@ -197,6 +207,3 @@ export default function Timeline() {
     </div>
   );
 }
-
-
-

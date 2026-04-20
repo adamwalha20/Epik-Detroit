@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import Navigation from '../components/Navigation';
 import { supabase, isMock } from '../lib/supabase';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Result() {
   const [profileData, setProfileData] = useState<any>(null);
   const [uploading, setUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
+  const { language, t } = useLanguage();
 
   const downloadCertificate = async () => {
     if (exporting || !profileData) return;
@@ -124,7 +126,7 @@ export default function Result() {
 
     } catch (err) {
       console.error('Certificate Export failed:', err);
-      alert('Could not export certificate. Please try again.');
+      alert(language === 'fr' ? 'Échec de l\'exportation. Veuillez réessayer.' : 'Could not export certificate. Please try again.');
     } finally {
       setExporting(false);
     }
@@ -226,12 +228,12 @@ export default function Result() {
                     <span className="text-[12px] md:text-lg font-headline text-white tracking-[0.2em] md:tracking-[0.4em] font-bold whitespace-nowrap">EPIK LEADERS</span>
                     <span className="material-symbols-outlined text-primary text-sm md:text-lg animate-pulse" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
                   </div>
-                  <span className="text-[7px] md:text-[10px] font-label text-primary tracking-[0.1em] md:tracking-[0.2em] font-bold opacity-80 uppercase bg-primary/10 px-2 md:px-3 py-0.5 md:py-1 rounded-sm border border-primary/20 whitespace-nowrap">ISIMS BRANCH | PROTOCOL EVALUATION</span>
+                  <span className="text-[7px] md:text-[10px] font-label text-primary tracking-[0.1em] md:tracking-[0.2em] font-bold opacity-80 uppercase bg-primary/10 px-2 md:px-3 py-0.5 md:py-1 rounded-sm border border-primary/20 whitespace-nowrap">{language === 'fr' ? 'BRANCHE ISIMS | ÉVALUATION PROTOCOLE' : 'ISIMS BRANCH | PROTOCOL EVALUATION'}</span>
                 </div>
               </div>
 
             <div className="flex flex-col relative z-10 w-full md:w-auto items-center md:items-end gap-2 border-t md:border-t-0 md:border-l border-primary/20 pt-6 md:pt-0 md:pl-8">
-              <span className="text-xs md:text-sm font-headline text-white tracking-[0.3em] font-bold uppercase">CERTIFICATE OF PARTICIPATION</span>
+              <span className="text-xs md:text-sm font-headline text-white tracking-[0.3em] font-bold uppercase">{language === 'fr' ? 'CERTIFICAT DE PARTICIPATION' : 'CERTIFICATE OF PARTICIPATION'}</span>
               <div className="flex items-center gap-3">
                 <div className="h-[1px] w-8 bg-primary/40 hidden md:block"></div>
                 <span className="text-[10px] font-label text-on-surface-variant tracking-[0.2em] opacity-80 font-bold font-mono">HASH: 26042026_DETROIT</span>
@@ -255,7 +257,7 @@ export default function Result() {
                   )}
                   <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity flex-col">
                     <span className="material-symbols-outlined text-white text-3xl">add_a_photo</span>
-                    <span className="text-[8px] text-white font-bold tracking-[0.2em] mt-1">UPDATE PHOTON</span>
+                    <span className="text-[8px] text-white font-bold tracking-[0.2em] mt-1">{language === 'fr' ? 'MÀJ PHOTO' : 'UPDATE PHOTON'}</span>
                   </div>
                   {uploading && <div className="absolute inset-0 bg-background/60 flex items-center justify-center"><div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div></div>}
                 </label>
@@ -281,7 +283,7 @@ export default function Result() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 px-4 sm:px-0">
                 <div className="bg-[#1a1a1a] p-6 border border-primary/20 relative overflow-hidden group shadow-inner">
                   <div className="absolute top-0 left-0 w-full h-[2px] bg-primary group-hover:shadow-[0_0_15px_rgba(0,174,239,1)] transition-all"></div>
-                  <span className="font-label text-[10px] text-primary uppercase tracking-[0.2em] block mb-4 font-bold">TRUST INDEX / SUCCESS</span>
+                  <span className="font-label text-[10px] text-primary uppercase tracking-[0.2em] block mb-4 font-bold">{language === 'fr' ? 'INDICE DE CONFIANCE / RÉUSSITE' : 'TRUST INDEX / SUCCESS'}</span>
                   <div className="flex items-end gap-2">
                     <span className="font-headline text-5xl text-white font-light drop-shadow-[0_0_15px_rgba(255,183,125,0.2)]">{profileData.score}</span>
                     <span className="text-primary text-lg pb-1 font-bold">%</span>
@@ -291,7 +293,7 @@ export default function Result() {
                 
                 <div className="bg-[#1a1a1a] p-6 border border-primary/20 relative overflow-hidden shadow-inner">
                   <div className="absolute top-0 left-0 w-full h-[2px] bg-secondary-container"></div>
-                  <span className="font-label text-[10px] text-secondary-container uppercase tracking-[0.2em] block mb-4 font-bold">STABILITY_GEN</span>
+                  <span className="font-label text-[10px] text-secondary-container uppercase tracking-[0.2em] block mb-4 font-bold">{language === 'fr' ? 'STABILITÉ_GÉN' : 'STABILITY_GEN'}</span>
                   <div className="flex items-end gap-2">
                     <span className="font-headline text-5xl text-white font-light">{profileData.stability_index}</span>
                     <span className="text-secondary-container text-sm pb-1 font-bold">/100</span>
@@ -307,7 +309,7 @@ export default function Result() {
                 <div className="flex flex-wrap gap-2">
                   <span className="bg-primary/10 border border-primary/30 text-primary font-label text-[9px] uppercase px-3 py-1.5 rounded-sm tracking-widest flex items-center gap-2 shadow-[0_0_10px_rgba(0,174,239,0.1)]">
                     <span className="material-symbols-outlined text-[12px]">verified_user</span>
-                    {profileData.trust_level}_CLEARANCE
+                    {profileData.trust_level}_{language === 'fr' ? 'AUTORISATION' : 'CLEARANCE'}
                   </span>
                   <span className="bg-white/5 border border-white/10 text-white/70 font-label text-[9px] uppercase px-3 py-1.5 rounded-sm tracking-widest flex items-center gap-2">
                     <span className="material-symbols-outlined text-[12px]">terminal</span>
@@ -319,7 +321,7 @@ export default function Result() {
               {/* Mission Timeline Section */}
               <div className="mt-4 flex flex-col gap-4 mb-8 sm:mb-0">
                 <div className="flex items-center gap-4">
-                  <h3 className="font-label text-[9px] text-primary uppercase tracking-[0.2em] font-bold">MISSION_CHECKPOINTS</h3>
+                  <h3 className="font-label text-[9px] text-primary uppercase tracking-[0.2em] font-bold">{language === 'fr' ? 'CHECKPOINTS MISSION' : 'MISSION_CHECKPOINTS'}</h3>
                   <div className="h-[1px] flex-grow bg-primary/20"></div>
                 </div>
                 <div className="grid grid-cols-1 gap-4">
@@ -370,7 +372,7 @@ export default function Result() {
                       className="relative group bg-transparent border border-primary/40 text-white font-label text-[10px] uppercase px-6 py-3 tracking-widest hover:bg-primary/10 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 border-dashed w-full sm:w-auto"
                     >
                       <span className="material-symbols-outlined text-[16px] text-primary">add_a_photo</span>
-                      {avatarUrl ? 'REFRESH PHOTO' : 'IMPORT IDENTITY'}
+                      {avatarUrl ? (language === 'fr' ? 'RAFFRAÎCHIR PHOTO' : 'REFRESH PHOTO') : (language === 'fr' ? 'IMPORTER IDENTITÉ' : 'IMPORT IDENTITY')}
                     </label>
                   </div>
                   
@@ -382,12 +384,12 @@ export default function Result() {
                     {exporting ? (
                       <>
                         <div className="w-4 h-4 border-2 border-[#131313] border-t-transparent rounded-full animate-spin"></div>
-                        PREPARING EXPORT...
+                        {t('preparing_export')}
                       </>
                     ) : (
                       <>
                         <span className="material-symbols-outlined text-[18px]">file_download</span>
-                        DOWNLOAD CERTIFICATE (HTML)
+                        {t('download_cert')}
                       </>
                     )}
                   </button>

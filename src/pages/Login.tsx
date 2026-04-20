@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
 import { supabase, isMock } from '../lib/supabase';
+import { useLanguage } from '../context/LanguageContext';
+import LanguageToggle from '../components/LanguageToggle';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -8,6 +8,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleAuth = async (type: 'login' | 'register') => {
     setLoading(true);
@@ -45,12 +46,15 @@ export default function Login() {
       <div className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] rounded-full bg-primary-container opacity-[0.03] blur-[100px] pointer-events-none"></div>
       <div className="absolute bottom-1/4 right-1/4 w-[30vw] h-[30vw] rounded-full bg-secondary-container opacity-[0.02] blur-[80px] pointer-events-none"></div>
       
-      <header className="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-40 hidden md:flex">
-        <div className="flex items-center gap-2 text-primary font-headline text-xs tracking-[0.1em] uppercase drop-shadow-[0_0_10px_rgba(0,174,239,0.5)]">
+      <header className="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-40">
+        <div className="flex items-center gap-2 text-primary font-headline text-xs tracking-[0.1em] uppercase drop-shadow-[0_0_10px_rgba(0,174,239,0.5)] hidden md:flex">
           <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>lens</span>
           <span>SYSTEM STATUS: ACTIVE</span>
         </div>
-        <span className="material-symbols-outlined text-outline-variant text-sm">settings_input_antenna</span>
+        <div className="flex items-center gap-6 ml-auto md:ml-0">
+          <LanguageToggle />
+          <span className="material-symbols-outlined text-outline-variant text-sm hidden md:inline-block">settings_input_antenna</span>
+        </div>
       </header>
       
       <main className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6">
@@ -64,8 +68,8 @@ export default function Login() {
               <div className="absolute inset-0 rounded-full border border-t-primary shadow-[0_0_12px_rgba(0,174,239,0.4)] animate-[spin_4s_linear_infinite]"></div>
               <span className="material-symbols-outlined text-primary text-3xl">memory</span>
             </div>
-            <h1 className="font-headline text-3xl font-bold tracking-tight text-on-surface">SYSTEM ACCESS</h1>
-            <p className="font-body text-on-surface-variant text-sm mt-2">AUTHENTICATION PROTOCOL REQUIRED</p>
+            <h1 className="font-headline text-3xl font-bold tracking-tight text-on-surface">{t('system_access')}</h1>
+            <p className="font-body text-on-surface-variant text-sm mt-2">{t('auth_required')}</p>
           </div>
           
           <form 
@@ -79,7 +83,7 @@ export default function Login() {
             <div className="space-y-6">
               <div className="space-y-4">
                 <div className="relative group">
-                  <label className="block font-label text-xs uppercase tracking-[0.05em] text-outline-variant mb-1 group-focus-within:text-primary transition-colors">SUBJECT_ID</label>
+                  <label className="block font-label text-xs uppercase tracking-[0.05em] text-outline-variant mb-1 group-focus-within:text-primary transition-colors">{t('subject_id')}</label>
                   <div className="relative flex items-center">
                     <span className="material-symbols-outlined absolute left-0 text-outline-variant text-sm group-focus-within:text-primary transition-colors">badge</span>
                     <input 
@@ -94,7 +98,7 @@ export default function Login() {
                 </div>
                 
                 <div className="relative group">
-                  <label className="block font-label text-xs uppercase tracking-[0.05em] text-outline-variant mb-1 group-focus-within:text-primary transition-colors">PASSKEY_HASH</label>
+                  <label className="block font-label text-xs uppercase tracking-[0.05em] text-outline-variant mb-1 group-focus-within:text-primary transition-colors">{t('passkey_hash')}</label>
                   <div className="relative flex items-center">
                     <span className="material-symbols-outlined absolute left-0 text-outline-variant text-sm group-focus-within:text-primary transition-colors">key</span>
                     <input 
@@ -118,27 +122,27 @@ export default function Login() {
                   className="relative w-full py-3 px-6 rounded border border-primary/50 text-primary font-label text-sm uppercase tracking-[0.05em] hover:bg-primary-container/10 hover:shadow-[0_0_12px_rgba(0,174,239,0.4)] transition-all duration-300 group overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
-                    INIT: Access System <span className="terminal-cursor group-hover:bg-on-surface hidden md:inline-block"></span>
+                    {t('access_system')} <span className="terminal-cursor group-hover:bg-on-surface hidden md:inline-block"></span>
                   </span>
                 </button>
                 
                 <div className="text-center">
-                  <span className="font-body text-xs text-outline-variant">OR</span>
+                  <span className="font-body text-xs text-outline-variant">{t('language_selector_or') || 'OR'}</span>
                 </div>
                 
                 <Link 
                   to="/signup"
                   className="relative w-full py-3 px-6 rounded border border-outline-variant/30 text-on-surface-variant font-label text-sm uppercase tracking-[0.05em] hover:border-secondary/50 hover:text-secondary hover:bg-secondary-container/5 transition-all duration-300 flex items-center justify-center"
                 >
-                  EXEC: Register Subject
+                  {t('register_subject')}
                 </Link>
               </div>
             </div>
           </form>
           
           <div className="mt-8 pt-4 border-t border-outline-variant/10 text-left">
-            <p className="font-label text-[10px] text-outline-variant uppercase tracking-[0.05em] opacity-50">&gt; CONNECTION_SECURE</p>
-            <p className="font-label text-[10px] text-outline-variant uppercase tracking-[0.05em] opacity-50">&gt; AWAITING_INPUT...</p>
+            <p className="font-label text-[10px] text-outline-variant uppercase tracking-[0.05em] opacity-50">&gt; {t('securing_connection')}</p>
+            <p className="font-label text-[10px] text-outline-variant uppercase tracking-[0.05em] opacity-50">&gt; {t('awaiting_input')}</p>
           </div>
         </div>
       </main>
