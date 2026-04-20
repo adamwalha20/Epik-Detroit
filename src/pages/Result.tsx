@@ -6,6 +6,129 @@ export default function Result() {
   const [profileData, setProfileData] = useState<any>(null);
   const [uploading, setUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
+
+  const downloadCertificate = async () => {
+    if (exporting || !profileData) return;
+    setExporting(true);
+    try {
+      const element = document.getElementById('identity-card');
+      if (!element) return;
+
+      // Ensure we are at the top to avoid capture issues with scroll
+      window.scrollTo(0, 0);
+
+      // Clone the element to manipulate it for export
+      const clonedElement = element.cloneNode(true) as HTMLElement;
+      
+      // Force landscape/desktop layout regardless of current viewport
+      clonedElement.style.width = '1200px';
+      clonedElement.style.maxWidth = 'none';
+      clonedElement.style.height = 'auto';
+      clonedElement.style.margin = '0 auto';
+      
+      // Promote responsive Tailwind classes to base classes
+      clonedElement.querySelectorAll('*').forEach(el => {
+        if (el instanceof HTMLElement) {
+          const classList = el.classList;
+          const originalClasses = Array.from(classList);
+          originalClasses.forEach(cls => {
+            if (cls.startsWith('md:') || cls.startsWith('lg:') || cls.startsWith('sm:')) {
+              const baseClass = cls.split(':')[1];
+              classList.add(baseClass);
+              if (baseClass === 'flex-row') classList.remove('flex-col');
+              if (baseClass === 'grid-cols-2') classList.remove('grid-cols-1');
+            }
+          });
+        }
+      });
+
+      // Convert all images in the cloned element to Base64
+      const images = Array.from(clonedElement.getElementsByTagName('img'));
+      await Promise.all(images.map(async (img) => {
+        try {
+          const response = await fetch(img.src, { mode: 'cors' });
+          const blob = await response.blob();
+          const reader = new FileReader();
+          const base64 = await new Promise<string>((resolve) => {
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.readAsDataURL(blob);
+          });
+          img.src = base64;
+        } catch (e) {
+          console.warn('Failed to inline image:', img.src, e);
+          // Keep original src if fetch fails (e.g. CORS)
+        }
+      }));
+
+      // Gather all active styles from the document
+      const styles = Array.from(document.styleSheets)
+        .map(sheet => {
+          try {
+            return Array.from(sheet.cssRules).map(rule => rule.cssText).join('\n');
+          } catch (e) {
+            console.warn('Could not read stylesheet', e);
+            return '';
+          }
+        }).join('\n');
+
+      // Assemble the final HTML file
+      const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200">
+  <title>EPIK DETROIT | CERTIFICATE - ${profileData.name.toUpperCase()}</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@200;300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
+  <style>
+    ${styles}
+    body { 
+      background: #131313; 
+      margin: 0; 
+      padding: 40px; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      min-height: 100vh; 
+      font-family: 'Manrope', sans-serif;
+      color: #e5e2e1;
+    }
+    #identity-card { 
+      width: 1200px !important; 
+      max-width: none !important; 
+      box-shadow: 0 0 50px rgba(0,0,0,0.8);
+      border: 1px solid rgba(0, 174, 239, 0.2);
+    }
+    @media print {
+      body { padding: 0; background: #000; }
+      #identity-card { box-shadow: none; border: none; }
+    }
+  </style>
+</head>
+<body>
+  ${clonedElement.outerHTML}
+</body>
+</html>`;
+
+      // Trigger the download
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `EPIK_DETROIT_CERTIFICATE_${profileData.name.replace(/\s+/g, '_').toUpperCase()}.html`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+    } catch (err) {
+      console.error('Certificate Export failed:', err);
+      alert('Could not export certificate. Please try again.');
+    } finally {
+      setExporting(false);
+    }
+  };
   
   
   useEffect(() => {
@@ -251,14 +374,22 @@ export default function Result() {
                     </label>
                   </div>
                   
-                  <button 
-                    onClick={() => {
-                      window.print();
-                    }}
-                    className="relative group bg-primary border border-primary text-[#131313] font-label text-[11px] uppercase px-8 py-3 tracking-widest hover:bg-white hover:border-white transition-all duration-300 flex items-center justify-center gap-3 font-bold shadow-[0_0_25px_rgba(0,174,239,0.4)] w-full sm:w-auto active:scale-95"
+                  <button
+                    onClick={downloadCertificate}
+                    disabled={exporting}
+                    className="relative group bg-primary border border-primary text-[#131313] font-label text-[11px] uppercase px-8 py-3 tracking-widest hover:bg-white hover:border-white transition-all duration-300 flex items-center justify-center gap-3 font-bold shadow-[0_0_25px_rgba(0,174,239,0.4)] w-full sm:w-auto active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    <span className="material-symbols-outlined text-[18px]">file_download</span>
-                    DOWNLOAD CERTIFICATE
+                    {exporting ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-[#131313] border-t-transparent rounded-full animate-spin"></div>
+                        PREPARING EXPORT...
+                      </>
+                    ) : (
+                      <>
+                        <span className="material-symbols-outlined text-[18px]">file_download</span>
+                        DOWNLOAD CERTIFICATE (HTML)
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
